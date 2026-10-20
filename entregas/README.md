@@ -7,9 +7,17 @@ templates para cá na hora certa:
 |---|---|---|
 | `meu_modelo.dbml` | 1 | o DBML que você desenhou no dbdiagram.io |
 | `adr.md` | 1 (revisado no 3) | [templates/adr.md](../templates/adr.md) |
+| `estrategia_backup.md` | Aula 03 (comparada no Lab 2, seção 2.12) | [templates/estrategia_backup.md](../templates/estrategia_backup.md) |
 | `relatorio_lab2.md` | 2 | [templates/relatorio_lab2.md](../templates/relatorio_lab2.md) |
 | `inventario.md` | 3 | [templates/inventario.md](../templates/inventario.md) |
 | `checklist_controles.md` | 3 | [templates/checklist_controles.md](../templates/checklist_controles.md) |
+
+A estratégia da Aula 03 é a única que nasce numa aula teórica. Copie o
+template no fim da Aula 03 (ou no começo do Lab 2) e preencha com a equipe:
+
+```bash
+cp -n templates/estrategia_backup.md entregas/estrategia_backup.md
+```
 
 O `make conferir` avisa (⚠️) enquanto um arquivo não existe ou ainda tem
 campos `(preencha)`.

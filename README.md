@@ -13,6 +13,14 @@ criptografia e documentar quem pode ver o quê.
 Um mesmo caso do começo ao fim: o banco que você cria no Lab 1 é o que você
 recupera no Lab 2 e governa no Lab 3.
 
+> 📦 **O que já vem pronto neste repositório:**
+>
+> * os **scripts** do ambiente, da conferência (`make conferir`) e da recuperação de quem faltou (`make gabarito`);
+> * o **gerador de dados sintéticos**, que você executa no Lab 1 (10 mil clientes, 12 mil contas e 400 mil transferências, sempre os mesmos números);
+> * os **roteiros de segurança** do Lab 2, que guiam a criação das chaves e dos certificados de treinamento. Nenhuma chave ou certificado vem no repositório: você os cria no próprio lab.
+>
+> O seu trabalho é rodar, entender, medir e decidir; não digitar o sistema do zero.
+
 ---
 
 ## 🎯 O que você vai aprender
@@ -75,12 +83,12 @@ da primeira aula**:
 | Perfil | Guia de preparação | Onde você digita os comandos | Tempo |
 |---|---|---|---|
 | 🪟 **Windows 10 ou 11** | **[Preparando o Windows](./docs/windows.md)** (WSL2 + Docker) | no terminal do **Ubuntu (WSL)**, nunca no PowerShell | ~20 min |
-| 🐧 **Ubuntu** (22.04 ou 24.04) | **[Preparando o Ubuntu](./docs/linux.md)** (Docker Engine ou Podman) | no terminal do Ubuntu | ~10 min |
+| 🐧 **Ubuntu** (22.04 ou 24.04) | **[Preparando o Ubuntu](./docs/linux.md)** (Docker Engine) | no terminal do Ubuntu | ~10 min |
 
 > 🏢 **Computador ou rede da empresa?** Comece por **[Computador e rede da empresa](./docs/ambiente_corporativo.md)**:
-> o que pedir à TI, Docker sem o Docker Desktop (Docker Engine no WSL ou
-> Podman), imagem do registro interno ou em arquivo, proxy e certificado da
-> empresa. Tudo testado nos dois perfis.
+> o que pedir à TI, Docker sem o Docker Desktop (Docker Engine no WSL),
+> imagem do registro interno ou em arquivo, proxy e certificado da empresa.
+> O Podman aparece lá como **alternativa em validação**.
 
 Ao terminar o guia, volte para cá e continue do passo
 [3. Confira o terreno](#3-confira-o-terreno).
@@ -109,8 +117,9 @@ Ao terminar o guia, volte para cá e continue do passo
   sudo apt update && sudo apt install -y make git
   ```
 
-* Sem permissão para instalar o Docker? O [Podman](./docs/ambiente_corporativo.md#ubuntu-podman-no-lugar-do-docker)
-  funciona com os mesmos comandos.
+* O [Podman](./docs/ambiente_corporativo.md#ubuntu-podman-alternativa-em-validação) é uma
+  **alternativa em validação**: use-o só depois que o instrutor rodar a
+  trilha completa com ele e liberar para a turma.
 
 > Usa Mac? Não é um perfil da turma, mas há um [guia](./docs/mac.md).
 
@@ -264,7 +273,7 @@ Todo bloco de comando dos roteiros diz **onde** ele deve ser colado:
 
 | | 🪟 Windows | 🐧 Linux |
 |---|---|---|
-| 1. Ligar o Docker | opção A: abra o **Docker Desktop** e espere a baleia parar. Opção B (Docker Engine no Ubuntu): nada, ele sobe sozinho | já está ligado (se não: `sudo systemctl start docker`; com Podman, nada a fazer) |
+| 1. Ligar o Docker | opção A: abra o **Docker Desktop** e espere a baleia parar. Opção B (Docker Engine no Ubuntu): nada, ele sobe sozinho | já está ligado (se não: `sudo systemctl start docker`) |
 | 2. Abrir o terminal | menu Iniciar → **Ubuntu** | o terminal do Ubuntu |
 | 3. Entrar na pasta | `cd ~/database_engineer_banco` | `cd ~/database_engineer_banco` (ou onde você clonou) |
 | 4. Subir e ver onde parou | `make subir && make status` | `make subir && make status` |
@@ -325,11 +334,11 @@ Deixe seu like e comentário nos vídeos do YouTube, isso ajuda e incentiva noss
 * [❓ FAQ de aula](./docs/faq.md) — erros comuns e como resolver
 * [⌨️ Comandos](./docs/comandos.md) — todo `make` e o `docker` equivalente
 * [🧩 Modelo de referência em DBML](./modelo/banco_sudoers.dbml) — para colar no dbdiagram.io
-* [🎬 Demonstração de WAL e PITR](./demos/pitr/README.md) — a recuperação até um instante, mostrada na aula de ciclo de vida e backup
+* [🎬 Demonstração de WAL e PITR](./demos/pitr/README.md) — material **opcional** de estudo: a recuperação até um instante, na prática (a Aula 03 trata do assunto em conceito)
 * [📝 Templates dos entregáveis](./templates/) — ADR, relatório, inventário e checklist
 * [🪟 Windows](./docs/windows.md) · [🐧 Ubuntu](./docs/linux.md) — preparação, passo a passo, para os dois perfis da turma
-* [🏢 Computador e rede da empresa](./docs/ambiente_corporativo.md) — o que pedir à TI, Docker Engine no WSL, Podman, registro interno, proxy, certificado
-* [👩‍🏫 Material do instrutor](./instrutor/README.md) — preparação, os seis encontros, demonstração de PITR e avaliação
+* [🏢 Computador e rede da empresa](./docs/ambiente_corporativo.md) — o que pedir à TI, Docker Engine no WSL, registro interno, proxy, certificado (Podman: em validação)
+* [👩‍🏫 Material do instrutor](./instrutor/README.md) — preparação, os seis encontros e avaliação
 
 ---
 

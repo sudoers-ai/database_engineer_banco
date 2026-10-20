@@ -1,15 +1,16 @@
 # 🎬 Demonstração — WAL, backup físico e PITR
 
-> ⬅️ [README principal](../../README.md) · Roteiro de apoio da **Aula 03** (ciclo de vida, backup e recuperação) · ⏱️ ~30 min
+> ⬅️ [README principal](../../README.md) · Material **opcional** de estudo e apoio · ⏱️ ~30 min
 
 > **A pergunta do banco:** "O dump da noite passada não cumpre a meta de
 > perder no máximo 5 minutos. Como voltar o banco ao segundo **anterior** ao
 > incidente?"
 
-Esta demonstração é conduzida pelo **instrutor**, com a tela compartilhada,
-na aula teórica de ciclo de vida e backup. O aluno pode repeti-la depois, por
-conta própria: ela não faz parte de nenhum `make conferir` e **não mexe** no
-banco dos labs.
+A Aula 03 explica WAL e PITR **em conceito**, com diagramas, sem
+demonstração prática. Este roteiro é **opcional**: fica como material de
+estudo e apoio para quem quiser ver o PITR funcionando, por conta própria,
+depois da aula. Ele não faz parte de nenhum `make conferir`, não é avaliado
+e **não mexe** no banco dos labs.
 
 **Pré-requisito:** o Lab 1 concluído (`make conferir l=1`). Faltou? Rode
 `make gabarito l=1`. Precisa de ~1 GB livre de disco.
@@ -267,7 +268,7 @@ arquivado.
 
 ## D.6 Discussão e limpeza
 
-Perguntas para a turma:
+Perguntas para pensar (e levar para a discussão do Lab 2):
 
 1. Qual o RPO desta configuração? (O que não foi arquivado: até `archive_timeout`, aqui 60 s. E se o servidor e o `wal_arquivado` estiverem no mesmo disco e ele queimar?)
 2. **Réplica não é backup.** Se a produção tivesse uma réplica em tempo real, o `DROP TABLE` chegaria nela em milissegundos. Para que serve a réplica, então? (Disponibilidade e RTO, não recuperação de erro lógico.)
