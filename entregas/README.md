@@ -29,18 +29,28 @@ Git corporativo (GitHub Enterprise), cada pessoa no seu **branch**, com um
 treinamento (o endereço vem do instrutor) e crie o seu branch:
 
 ```bash
+git config --global user.name "Seu Nome"
+git config --global user.email "seu.email@empresa.com.br"
 git remote add turma https://SEU-GITHUB-ENTERPRISE/ORGANIZACAO/REPOSITORIO.git
 git checkout -b entregas/seu-nome
 ```
+
+As duas primeiras linhas dizem ao git quem assina os commits. Sem elas, o
+primeiro `git commit` para com `Author identity unknown`. Já configurou
+antes? `git config user.email` mostra; pule essas duas.
 
 **A cada lab**, quando o `make conferir` não mostrar mais lembretes de
 `(preencha)`:
 
 ```bash
-git add -f entregas/*.md entregas/*.dbml
+git add -f entregas/
+git status --short
 git commit -m "Lab 1: modelo e ADR"
 git push -u turma entregas/seu-nome
 ```
+
+O `git status --short` lista o que vai no commit: confira que são só os
+arquivos desta pasta.
 
 Na primeira vez, abra o **pull request** do seu branch no GitHub
 Enterprise. Nas próximas, o mesmo pull request recebe os commits novos.

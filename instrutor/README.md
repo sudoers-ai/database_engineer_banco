@@ -40,7 +40,8 @@ usam só PostgreSQL.
 ### Uma semana antes
 
 * [ ] Envie aos alunos o link do repositório e peça o **preflight** (README, "Começando em 5 minutos"): instalar Docker, `make preflight` terminando em **Pronto para o Lab 1**.
-* [ ] Separe a turma nos **dois perfis**, Windows (WSL2) e Linux, e confirme que cada aluno fez o guia do seu perfil.
+* [ ] **Duas semanas antes**, mande à TI da empresa a lista [O que pedir à TI](../docs/ambiente_corporativo.md#o-que-pedir-à-ti): WSL2, `sudo`, sites liberados e o Docker escolhido.
+* [ ] Separe a turma nos **dois perfis**, Windows (WSL2) e Ubuntu, e confirme que cada aluno fez o guia do seu perfil.
 * [ ] Pergunte quem usa **computador corporativo**: o Docker Desktop exige licença paga em empresas grandes, e WSL, Docker ou o Docker Hub podem estar bloqueados. O guia [Computador e rede da empresa](../docs/ambiente_corporativo.md) tem as saídas: Docker Engine no WSL, Podman no Linux, imagem do registro interno (`IMAGEM_POSTGRES` no `.env`) ou em arquivo `.tar`.
 * [ ] Se o Docker Hub estiver bloqueado na rede da turma, obtenha com a TI o endereço do registro interno **ou** gere o `postgres17.tar` (`docker save`) e distribua antes da aula.
 * [ ] Confirme que `https://dbdiagram.io` abre na rede da sala. Se não abrir, o Lab 1 funciona com o diagrama Mermaid do roteiro e o `.dbml` no editor.

@@ -75,19 +75,21 @@ da primeira aula**:
 | Perfil | Guia de preparação | Onde você digita os comandos | Tempo |
 |---|---|---|---|
 | 🪟 **Windows 10 ou 11** | **[Preparando o Windows](./docs/windows.md)** (WSL2 + Docker) | no terminal do **Ubuntu (WSL)**, nunca no PowerShell | ~20 min |
-| 🐧 **Linux** (Ubuntu, Debian, Fedora) | **[Preparando o Linux](./docs/linux.md)** (Docker Engine ou Podman) | no terminal do sistema | ~10 min |
+| 🐧 **Ubuntu** (22.04 ou 24.04) | **[Preparando o Ubuntu](./docs/linux.md)** (Docker Engine ou Podman) | no terminal do Ubuntu | ~10 min |
 
-> 🏢 **Computador ou rede da empresa?** Docker Desktop sem licença, Docker
-> Hub bloqueado, proxy: veja **[Computador e rede da empresa](./docs/ambiente_corporativo.md)**
-> antes de começar. Tem as alternativas (Docker Engine no WSL, Podman,
-> imagem do registro interno ou em arquivo).
+> 🏢 **Computador ou rede da empresa?** Comece por **[Computador e rede da empresa](./docs/ambiente_corporativo.md)**:
+> o que pedir à TI, Docker sem o Docker Desktop (Docker Engine no WSL ou
+> Podman), imagem do registro interno ou em arquivo, proxy e certificado da
+> empresa. Tudo testado nos dois perfis.
 
 Ao terminar o guia, volte para cá e continue do passo
 [3. Confira o terreno](#3-confira-o-terreno).
 
 ### 🪟 Perfil Windows
 
-* Tudo roda dentro do **WSL2** (um Ubuntu dentro do Windows). Depois de
+* Tudo roda dentro do **WSL2** (um Ubuntu dentro do Windows). O Docker pode
+  ser o **Docker Desktop** ou, em computador da empresa sem licença, o
+  **Docker Engine instalado no próprio Ubuntu** (opção B do guia). Depois de
   instalado, **todos os comandos da trilha são digitados no terminal do
   Ubuntu**, nunca no PowerShell nem no Prompt de Comando: eles não têm
   `make` e não rodam os scripts.
@@ -97,18 +99,17 @@ Ao terminar o guia, volte para cá e continue do passo
   `code .` (o VS Code instala sozinho a extensão do WSL), ou no Explorador
   de Arquivos com `explorer.exe .`.
 
-### 🐧 Perfil Linux
+### 🐧 Perfil Ubuntu
 
 * O Docker roda direto no sistema: é o caminho mais simples.
 * Se você já tem Docker, confira com `docker compose version` (com espaço).
   Se responder com um número de versão, falta só o `make`:
 
-  | Distribuição | Como instalar |
-  |---|---|
-  | Ubuntu / Debian | `sudo apt update && sudo apt install make` |
-  | Fedora | `sudo dnf install make` |
+  ```bash
+  sudo apt update && sudo apt install -y make git
+  ```
 
-* Sem permissão para instalar o Docker? O [Podman](./docs/ambiente_corporativo.md#linux-podman-no-lugar-do-docker)
+* Sem permissão para instalar o Docker? O [Podman](./docs/ambiente_corporativo.md#ubuntu-podman-no-lugar-do-docker)
   funciona com os mesmos comandos.
 
 > Usa Mac? Não é um perfil da turma, mas há um [guia](./docs/mac.md).
@@ -150,8 +151,8 @@ Se aparecer `make: command not found` (ou `comando não encontrado`):
 
 * **no Windows**, você provavelmente está no PowerShell. Abra o terminal do
   **Ubuntu** e veja o [guia de preparação](./docs/windows.md);
-* **no Linux**, instale com o comando da tabela do
-  [perfil Linux](#-perfil-linux) e repita este passo.
+* **no Ubuntu**, instale com o comando da tabela do
+  [perfil Ubuntu](#-perfil-ubuntu) e repita este passo.
 
 ### 3. Confira o terreno
 
@@ -263,8 +264,8 @@ Todo bloco de comando dos roteiros diz **onde** ele deve ser colado:
 
 | | 🪟 Windows | 🐧 Linux |
 |---|---|---|
-| 1. Ligar o Docker | abra o **Docker Desktop** e espere a baleia parar (com Docker Engine no WSL, ele sobe sozinho) | já está ligado (se não: `sudo systemctl start docker`) |
-| 2. Abrir o terminal | menu Iniciar → **Ubuntu** | o terminal do sistema |
+| 1. Ligar o Docker | opção A: abra o **Docker Desktop** e espere a baleia parar. Opção B (Docker Engine no Ubuntu): nada, ele sobe sozinho | já está ligado (se não: `sudo systemctl start docker`; com Podman, nada a fazer) |
+| 2. Abrir o terminal | menu Iniciar → **Ubuntu** | o terminal do Ubuntu |
 | 3. Entrar na pasta | `cd ~/database_engineer_banco` | `cd ~/database_engineer_banco` (ou onde você clonou) |
 | 4. Subir e ver onde parou | `make subir && make status` | `make subir && make status` |
 | Mais terminais | nova aba do Windows Terminal → Ubuntu, e o `cd` do passo 3 | nova aba do terminal, e o `cd` do passo 3 |
@@ -326,8 +327,8 @@ Deixe seu like e comentário nos vídeos do YouTube, isso ajuda e incentiva noss
 * [🧩 Modelo de referência em DBML](./modelo/banco_sudoers.dbml) — para colar no dbdiagram.io
 * [🎬 Demonstração de WAL e PITR](./demos/pitr/README.md) — a recuperação até um instante, mostrada na aula de ciclo de vida e backup
 * [📝 Templates dos entregáveis](./templates/) — ADR, relatório, inventário e checklist
-* [🪟 Windows](./docs/windows.md) · [🐧 Linux](./docs/linux.md) — preparação, passo a passo, para os dois perfis da turma
-* [🏢 Computador e rede da empresa](./docs/ambiente_corporativo.md) — Docker Engine no WSL, Podman, registro interno, proxy
+* [🪟 Windows](./docs/windows.md) · [🐧 Ubuntu](./docs/linux.md) — preparação, passo a passo, para os dois perfis da turma
+* [🏢 Computador e rede da empresa](./docs/ambiente_corporativo.md) — o que pedir à TI, Docker Engine no WSL, Podman, registro interno, proxy, certificado
 * [👩‍🏫 Material do instrutor](./instrutor/README.md) — preparação, os seis encontros, demonstração de PITR e avaliação
 
 ---

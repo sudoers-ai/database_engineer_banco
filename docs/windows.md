@@ -11,9 +11,14 @@ São quatro passos, cerca de 20 minutos (a maior parte é download).
 | Passo | O que instala | Onde |
 |---|---|---|
 | 1 | WSL2 com Ubuntu | PowerShell |
-| 2 | Docker Desktop, ligado ao WSL | Windows |
+| 2 | O Docker: **A)** Docker Desktop **ou B)** Docker Engine dentro do Ubuntu | Windows ou terminal do Ubuntu |
 | 3 | `make` e `git` | terminal do Ubuntu |
 | 4 | O repositório | terminal do Ubuntu |
+
+> 🏢 **Computador da empresa?** Leia antes o
+> [Computador e rede da empresa](./ambiente_corporativo.md): ele diz o que
+> pedir à TI (WSL, acesso de administrador, sites liberados) e o que fazer
+> se o Docker Hub estiver bloqueado.
 
 > ⚠️ **A regra que evita quase todos os problemas:** depois do passo 1,
 > **todos os comandos da trilha são digitados no terminal do Ubuntu**, nunca
@@ -55,13 +60,33 @@ Tem que aparecer o Ubuntu com **VERSION 2**:
 >
 > Se o `wsl --install` disser que o WSL já está instalado mas não houver
 > nenhuma distribuição, rode `wsl --install -d Ubuntu`.
+>
+> **Sem acesso de administrador?** O `wsl --install` exige. Num computador
+> da empresa, peça à TI para habilitar o WSL2 e instalar o Ubuntu.
+>
+> **A Microsoft Store está bloqueada** (o download do Ubuntu não sai do
+> lugar)? Use `wsl --install -d Ubuntu --web-download`, que baixa direto,
+> sem a loja.
 
 **Como abrir o terminal do Ubuntu daqui em diante:** menu Iniciar → digite
 **Ubuntu** → Enter. É nele que você vai trabalhar.
 
 ---
 
-## Passo 2 — Instalar o Docker Desktop
+## Passo 2 — Instalar o Docker
+
+Há dois caminhos. Os dois rodam a trilha igual; escolha **um**:
+
+| | **A) Docker Desktop** | **B) Docker Engine dentro do Ubuntu** |
+|---|---|---|
+| Quando usar | computador pessoal, ou empresa **com** licença do Docker Desktop | computador da empresa **sem** licença do Docker Desktop |
+| Licença | grátis para uso pessoal e empresas pequenas; **paga** em empresas grandes | grátis (código aberto) |
+| Como é | programa do Windows, com a baleia na bandeja | serviço do Ubuntu, sem janela |
+| No começo de cada aula | abrir o Docker Desktop | nada: sobe junto com o Ubuntu |
+
+Na dúvida, num computador da empresa, use o **B**.
+
+### Opção A — Docker Desktop
 
 1. Baixe e instale o **Docker Desktop para Windows**:
    https://www.docker.com/products/docker-desktop
@@ -84,14 +109,72 @@ Os dois têm que responder com um número de versão.
 > disciplina. Se o terminal responder
 > `Cannot connect to the Docker daemon`, é porque ele está fechado.
 
-> **Computador da empresa?** O Docker Desktop é gratuito para uso pessoal,
-> educacional e em empresas pequenas, mas **empresas grandes precisam de
-> assinatura paga**, e notebooks corporativos costumam bloquear a instalação
-> do WSL ou do Docker. Se for o seu caso, fale com o instrutor **antes** da
-> primeira aula. A alternativa gratuita é o **Docker Engine direto no Ubuntu
-> do WSL**, sem o Docker Desktop: o passo a passo, e o que fazer se o Docker
-> Hub estiver bloqueado, está em
-> [Computador e rede da empresa](./ambiente_corporativo.md#windows-docker-engine-dentro-do-wsl-sem-docker-desktop).
+Pule para o [passo 3](#passo-3--instalar-o-make-e-o-git).
+
+### Opção B — Docker Engine dentro do Ubuntu (sem Docker Desktop)
+
+O Docker Desktop é só uma forma de ter o Docker. O **Docker Engine**, que é o
+Docker propriamente dito, é gratuito e roda direto no Ubuntu do WSL. Tudo
+abaixo é no **terminal do Ubuntu**, menos o `wsl --shutdown`, que é no
+PowerShell.
+
+> Tem o Docker Desktop instalado? Não misture os dois: desligue a integração
+> com o Ubuntu (Docker Desktop → Settings → Resources → WSL Integration) ou
+> desinstale o Docker Desktop antes.
+
+**B1. Ligue o systemd no Ubuntu.** É ele que mantém o Docker rodando:
+
+```bash
+grep -qs '^systemd=true' /etc/wsl.conf || printf '\n[boot]\nsystemd=true\n' | sudo tee -a /etc/wsl.conf
+```
+
+(Se o arquivo já tem `systemd=true`, o comando não faz nada; se não tem,
+acrescenta no fim, sem apagar o que já estava lá.)
+
+Feche o Ubuntu e, no **PowerShell** (não precisa ser administrador):
+
+```powershell
+wsl --shutdown
+```
+
+Abra o Ubuntu de novo e confira: `systemctl is-system-running` tem que
+responder `running` ou `degraded` (os dois servem).
+
+**B2. Instale o Docker Engine** com o script oficial da Docker:
+
+```bash
+curl -fsSL https://get.docker.com -o instalar-docker.sh
+sudo sh instalar-docker.sh
+```
+
+O script avisa que você está no WSL e recomenda o Docker Desktop. **Espere:**
+ele continua sozinho em 20 segundos. Leva um ou dois minutos.
+
+**B3. Use o Docker sem `sudo`:**
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+O grupo novo só vale numa sessão nova: feche o Ubuntu, rode `wsl --shutdown`
+no PowerShell e abra o Ubuntu de novo.
+
+**B4. Confira**, agora **sem** `sudo`:
+
+```bash
+docker run --rm hello-world
+docker compose version
+```
+
+Tem que aparecer `Hello from Docker!` e um número de versão. Se aparecer
+`permission denied`, a sessão ainda é a antiga: repita o `wsl --shutdown`.
+
+> Nesse modo **não existe a baleia**. O Docker sobe junto com o Ubuntu. Se
+> um dia ele não responder (`Cannot connect to the Docker daemon`), rode
+> `sudo systemctl start docker`.
+>
+> O `localhost:5470` continua acessível pelo Windows (DBeaver, pgAdmin): o
+> WSL2 repassa as portas sozinho.
 
 ---
 
@@ -168,8 +251,8 @@ cd ~/database_engineer_banco
 ```
 
 **Ao fim da aula.** `make derruba` para os containers e mantém o seu
-progresso. Na próxima aula: abra o Docker Desktop, abra o Ubuntu,
-`cd ~/database_engineer_banco` e `make subir`.
+progresso. Na próxima aula: abra o Docker Desktop (só na opção A), abra o
+Ubuntu, `cd ~/database_engineer_banco` e `make subir`.
 
 ---
 
@@ -178,8 +261,12 @@ progresso. Na próxima aula: abra o Docker Desktop, abra o Ubuntu,
 | O que apareceu | O que é | O que fazer |
 |---|---|---|
 | `make: command not found` | Você está no PowerShell, ou pulou o passo 3 | Abra o terminal do **Ubuntu**. Se já está nele, refaça o passo 3 |
-| `Cannot connect to the Docker daemon` | O Docker Desktop está fechado | Abra o Docker Desktop e espere a baleia parar |
-| `The command 'docker' could not be found in this WSL 2 distro` | A integração com o WSL está desligada | Passo 2, item 4 |
+| `Cannot connect to the Docker daemon` | Opção A: o Docker Desktop está fechado. Opção B: o serviço parou | A: abra o Docker Desktop e espere a baleia parar. B: `sudo systemctl start docker` |
+| `permission denied while trying to connect to the Docker daemon` | Opção B: a sessão é anterior ao `usermod` | Feche o Ubuntu, `wsl --shutdown` no PowerShell, abra de novo (B3) |
+| `System has not been booted with systemd` | Opção B: o systemd não está ligado | Refaça o B1 e o `wsl --shutdown` |
+| `The command 'docker' could not be found in this WSL 2 distro` | Opção A: a integração com o WSL está desligada | Opção A, item 4 |
+| O `wsl --install` não sai do lugar, ou a loja está bloqueada | Rede da empresa | `wsl --install -d Ubuntu --web-download` |
+| `wsl --install` pede administrador | Computador da empresa | Peça à TI para habilitar o WSL2 e instalar o Ubuntu |
 | `wsl --install` não é reconhecido | Windows desatualizado | Rode o Windows Update e tente de novo |
 | Erro de virtualização ao instalar o WSL ou o Docker | A virtualização está desligada no BIOS/UEFI | Ligue *Intel VT-x* ou *AMD-V* (ou *SVM*) no BIOS do computador |
 | Tudo muito lento | O repositório está em `/mnt/c/...` | Rode `pwd`. Se o caminho começar com `/mnt/`, clone de novo dentro de `~` (passo 4) |

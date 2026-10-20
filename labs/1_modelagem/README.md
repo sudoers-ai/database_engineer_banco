@@ -794,7 +794,7 @@ make sql f=labs/1_modelagem/sql/04_indices.sql
 
 <!-- rodar: producao -->
 ```sql
-EXPLAIN (ANALYZE, COSTS OFF)
+EXPLAIN (ANALYZE, COSTS OFF, BUFFERS)
 SELECT criado_em, tipo, valor, transferencia_id
 FROM lancamentos
 WHERE conta_id = 4242 AND criado_em >= now() - interval '30 days'
@@ -804,21 +804,30 @@ ORDER BY criado_em;
 ```
                                               QUERY PLAN
 -------------------------------------------------------------------------------------------------------
- Sort (actual time=0.089..0.090 rows=5 loops=1)
+ Sort (actual time=0.100..0.101 rows=5 loops=1)
    Sort Key: criado_em
    Sort Method: quicksort  Memory: 25kB
-   ->  Bitmap Heap Scan on lancamentos (actual time=0.053..0.071 rows=5 loops=1)
+   Buffers: shared hit=13 read=1
+   ->  Bitmap Heap Scan on lancamentos (actual time=0.073..0.090 rows=5 loops=1)
          Recheck Cond: ((conta_id = 4242) AND (criado_em >= (now() - '30 days'::interval)))
          Heap Blocks: exact=5
-         ->  Bitmap Index Scan on idx_lancamentos_conta_data (actual time=0.039..0.039 rows=5 loops=1)
+         Buffers: shared hit=10 read=1
+         ->  Bitmap Index Scan on idx_lancamentos_conta_data (actual time=0.059..0.060 rows=5 loops=1)
                Index Cond: ((conta_id = 4242) AND (criado_em >= (now() - '30 days'::interval)))
- Planning Time: 0.418 ms
- Execution Time: 0.135 ms
+               Buffers: shared hit=5 read=1
+ Planning:
+   Buffers: shared hit=130 dirtied=2
+ Planning Time: 0.282 ms
+ Execution Time: 0.131 ms
 ```
 
 De ~19 ms para ~0,1 ms: **mais de 100 vezes** mais rápido. O banco
 foi direto às 5 linhas pelo índice (`Index Cond`), sem descartar nenhuma.
 Os seus números serão outros. Compare a **ordem de grandeza**.
+
+O `BUFFERS` acrescenta as linhas `Buffers`: quantas **páginas** (blocos de
+8 kB) o banco leu, da memória (`hit`) ou do disco (`read`). Some as duas da
+primeira linha: dá umas **14**. Guarde esse número, ele volta logo abaixo.
 
 **Por que `(conta_id, criado_em)` e não o contrário?** Num índice composto,
 as linhas ficam ordenadas pela primeira coluna e, dentro dela, pela
@@ -830,8 +839,8 @@ contas. Regra prática: **igualdade primeiro, intervalo depois**.
 ### Prove a regra: a ordem trocada
 
 Não acredite na regra: meça. Dentro de uma transação, troque o índice pelo
-de ordem invertida, peça o plano e desfaça tudo com `ROLLBACK`. O
-`BUFFERS` mostra quantas **páginas** (blocos de 8 kB) o banco precisou ler.
+de ordem invertida, peça o plano e desfaça tudo com `ROLLBACK`. Olhe de
+novo as **páginas lidas** (`Buffers`).
 
 🐘 **No psql:**
 

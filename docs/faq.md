@@ -9,13 +9,13 @@ problemas de ambiente, que valem para os três labs.
 
 * **Windows e Mac:** abra o Docker Desktop e espere a baleia parar de se mexer.
 * **Linux:** `sudo systemctl start docker`.
-* Se a mensagem for `permission denied while trying to connect to the Docker daemon`, o seu usuário não está no grupo `docker`. Veja o [passo 2 do guia do Linux](./linux.md#passo-2--usar-o-docker-sem-sudo) e saia e entre de novo na sessão.
+* Se a mensagem for `permission denied while trying to connect to the Docker daemon`, o seu usuário não está no grupo `docker`. Veja o [passo 2 do guia do Ubuntu](./linux.md#passo-2--usar-o-docker-sem-sudo) e saia e entre de novo na sessão.
 
 ### `make: command not found`
 
 No Windows, você está no PowerShell: abra o terminal do **Ubuntu**. No
-Linux, instale o `make` (tabela
-["Perfil Linux"](../README.md#-perfil-linux) do README).
+Ubuntu, instale o `make` (comando do
+["Perfil Ubuntu"](../README.md#-perfil-ubuntu) do README).
 
 ### `docker: 'compose' is not a docker command`
 
