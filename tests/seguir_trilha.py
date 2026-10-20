@@ -45,6 +45,7 @@ TRILHA = [
     (1, "labs/1_modelagem/README.md"),
     (2, "labs/2_backup_criptografia/README.md"),
     (3, "labs/3_governanca/README.md"),
+    (4, "demos/pitr/README.md"),          # demonstracao da Aula 03 (nao mexe no banco dos labs)
 ]
 NOS = ("producao",)
 

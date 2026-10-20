@@ -16,7 +16,9 @@ name: database_engineer_banco
 
 services:
   producao:
-    image: postgres:17
+    # A imagem pode vir de outro registro (ex.: o registro interno da empresa).
+    # Troque no .env, nunca aqui: IMAGEM_POSTGRES=registro.interno/library/postgres:17
+    image: ${IMAGEM_POSTGRES:-postgres:17}
     container_name: dbb_producao
     hostname: producao
     entrypoint: ["bash", "/repo/infra/entrypoint.sh"]

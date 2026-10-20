@@ -15,7 +15,7 @@ echo -e "${N}Conferindo o ambiente${F}"
 echo
 
 if ! command -v docker >/dev/null 2>&1; then
-  erro_ "Docker não encontrado. Siga o guia do seu sistema em docs/ (windows.md, mac.md ou linux.md)."
+  erro_ "Docker não encontrado. Siga o guia do seu perfil: docs/windows.md ou docs/linux.md (Podman: docs/ambiente_corporativo.md)."
   echo; exit 1
 fi
 if ! docker info >/dev/null 2>&1; then
@@ -53,12 +53,15 @@ else
   ok "porta $porta livre"
 fi
 
-mem_kb=$(docker info --format '{{.MemTotal}}' 2>/dev/null || echo 0)
-mem_gb=$(( mem_kb / 1024 / 1024 / 1024 ))
+# Docker responde em .MemTotal; o Podman (com podman-docker) em .Host.MemTotal
+mem_b=$(docker info --format '{{.MemTotal}}' 2>/dev/null) || mem_b=""
+[[ "$mem_b" =~ ^[0-9]+$ ]] || mem_b=$(docker info --format '{{.Host.MemTotal}}' 2>/dev/null) || mem_b=0
+[[ "$mem_b" =~ ^[0-9]+$ ]] || mem_b=0
+mem_gb=$(( mem_b / 1024 / 1024 / 1024 ))
 if [ "$mem_gb" -ge 1 ]; then
   ok "memória disponível para o Docker: ${mem_gb} GB"
 else
-  aviso "memória para o Docker abaixo de 1 GB. Aumente em Docker Desktop > Settings > Resources."
+  aviso "memória para o Docker abaixo de 1 GB (ou não foi possível medir). No Docker Desktop: Settings > Resources."
 fi
 
 echo

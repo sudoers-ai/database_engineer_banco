@@ -14,8 +14,8 @@ problemas de ambiente, que valem para os três labs.
 ### `make: command not found`
 
 No Windows, você está no PowerShell: abra o terminal do **Ubuntu**. No
-Linux ou no Mac, instale o `make` (tabela
-["Já tenho o Docker"](../README.md#-já-tenho-o-docker) do README).
+Linux, instale o `make` (tabela
+["Perfil Linux"](../README.md#-perfil-linux) do README).
 
 ### `docker: 'compose' is not a docker command`
 

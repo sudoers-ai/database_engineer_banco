@@ -62,3 +62,19 @@ Liste pelo menos três coisas que os controles deste lab **não** protegem.
 1. (preencha)
 2. (preencha)
 3. (preencha)
+
+## 7. Revisão cruzada da dupla (seção 2.12)
+
+Quem revisou este relatório (e conferiu na tela de quem o escreveu):
+(preencha)
+
+| # | Pergunta do revisor | Resposta | Evidência vista |
+|---|---|---|---|
+| 1 | RPO e RTO foram **medidos** (com hora) e comparados com as metas? | (preencha) | (preencha) |
+| 2 | Alguma chave mora no mesmo lugar que a cópia que ela protege? | (preencha) | (preencha) |
+| 3 | Sobrou cópia **em claro** no storage de backup? | (preencha) | (preencha) |
+| 4 | O backup cifrado foi **restaurado** e conferido pela auditoria? | (preencha) | (preencha) |
+| 5 | A conexão sem TLS é recusada, e a com `verify-full` confere o nome? | (preencha) | (preencha) |
+| 6 | Qual o maior risco que continua aberto, e quem decide sobre ele? | (preencha) | — |
+
+**Achado mais importante da revisão e o que foi feito com ele:** (preencha)

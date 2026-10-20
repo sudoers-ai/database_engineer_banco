@@ -36,6 +36,11 @@ obedece. No fim, as equipes apresentam o trabalho dos três labs.
 
 ⏱️ 15 min
 
+> **Antes de tudo, no seu perfil:** 🪟 **Windows**: abra o Docker Desktop
+> (se usa) e o terminal do **Ubuntu**. 🐧 **Linux**: abra o terminal. Nos
+> dois, entre na pasta com `cd ~/database_engineer_banco`. O passo a passo
+> está em [o começo de cada aula](../../README.md#o-começo-de-cada-aula-em-cada-perfil).
+
 🖥️ **No seu terminal:**
 
 <!-- rodar: shell -->
@@ -455,7 +460,7 @@ Conferindo o Lab 3 - Governança, acessos e consolidação
 
 ## 3.7 Apresentações
 
-⏱️ 45 min · cada equipe tem **6 minutos** de apresentação e **3** de perguntas
+⏱️ 45 min · cada equipe tem **6 minutos** de apresentação e **3** de perguntas (com 6 equipes ou mais, o instrutor reduz para 5 e 2)
 
 Roteiro sugerido, com um slide (ou uma tela) por item:
 
