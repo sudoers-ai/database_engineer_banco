@@ -1,4 +1,4 @@
-# 🐧 Preparando o Linux
+# 🐧 Preparando o Ubuntu
 
 > ⬅️ [README principal](../README.md)
 
@@ -6,8 +6,8 @@ No Linux o Docker roda direto no sistema, sem nada no meio: é o ambiente
 mais simples e mais rápido para a trilha. Você prepara uma vez e usa na
 disciplina inteira.
 
-Os comandos abaixo são para **Ubuntu** e **Debian** (e derivados, como Linux
-Mint e Pop!_OS). No **Fedora**, veja as notas em cada passo.
+Os comandos abaixo são para o **Ubuntu 22.04 ou 24.04**, o perfil Linux da
+turma (servem também para derivados, como Linux Mint e Pop!_OS).
 
 São quatro passos, cerca de 10 minutos.
 
@@ -23,7 +23,8 @@ São quatro passos, cerca de 10 minutos.
 >
 > 🏢 **Computador da empresa, sem permissão para o Docker, ou Docker Hub
 > bloqueado?** Veja [Computador e rede da empresa](./ambiente_corporativo.md):
-> o Podman substitui os passos 1 e 2, e a imagem pode vir do registro interno.
+> o Podman (Ubuntu 24.04) substitui os passos 1 e 2, e a imagem pode vir
+> do registro interno. Lá também está o que pedir à TI.
 
 ---
 
@@ -48,8 +49,8 @@ sudo docker run --rm hello-world
 
 Tem que aparecer `Hello from Docker!`.
 
-> **Fedora:** o mesmo script funciona. Depois dele, ligue o serviço:
-> `sudo systemctl enable --now docker`.
+> **Atrás de proxy?** Rode o script com `sudo -E sh instalar-docker.sh` e
+> veja a seção de [proxy](./ambiente_corporativo.md#proxy-corporativo).
 >
 > **Prefere instalar pelo repositório, passo a passo?** O guia oficial está
 > em https://docs.docker.com/engine/install/ (escolha a sua distribuição).
@@ -93,8 +94,6 @@ novo.
 ```bash
 sudo apt update && sudo apt install -y make git
 ```
-
-(**Fedora:** `sudo dnf install -y make git`.)
 
 Confira:
 

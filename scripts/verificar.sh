@@ -23,7 +23,11 @@ if ! docker info >/dev/null 2>&1; then
   echo "       Se a mensagem for 'permission denied', veja docs/faq.md"
   echo; exit 1
 fi
-ok "Docker respondendo ($(docker --version | awk '{print $3}' | tr -d ','))"
+if docker --version 2>/dev/null | grep -qi podman; then
+  ok "Podman respondendo pelo comando docker ($(docker --version | awk '{print $3}'))"
+else
+  ok "Docker respondendo ($(docker --version | awk '{print $3}' | tr -d ','))"
+fi
 
 if docker compose version >/dev/null 2>&1; then
   ok "Docker Compose v2 ($(docker compose version --short 2>/dev/null))"
