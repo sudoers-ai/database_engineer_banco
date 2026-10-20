@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+# as entregas do aluno nao vao para o git (entregue como o instrutor pedir)
+entregas/*
+!entregas/README.md

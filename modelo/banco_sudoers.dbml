@@ -1,0 +1,74 @@
+// ==========================================================================
+// Banco Sudoers - modelo de REFERENCIA em DBML
+//
+// Como usar: abra https://dbdiagram.io/d , apague o exemplo do painel da
+// esquerda e cole este arquivo inteiro. O diagrama aparece na direita.
+//
+// Este e o modelo FINAL, igual ao labs/1_modelagem/sql/01_schema.sql.
+// Faca a SUA modelagem primeiro (secao 1.2 do roteiro) e so depois compare.
+// Os CHECKs aparecem como notas: o SQL de referencia e que os implementa.
+// ==========================================================================
+
+Project banco_sudoers {
+  database_type: 'PostgreSQL'
+  Note: 'Contas, transferencias internas e extrato. Dados sinteticos.'
+}
+
+Table clientes {
+  id bigint [pk, increment]
+  nome text [not null]
+  cpf char(11) [not null, unique, note: '11 digitos; sintetico, com digito verificador invalido']
+  email text [not null]
+  telefone text
+  data_nascimento date [not null]
+  renda_mensal "numeric(12,2)" [note: 'CHECK >= 0. No Lab 2 vira renda_cifrada (bytea)']
+  criado_em timestamptz [not null, default: `now()`]
+  Note: 'Titulares de conta'
+}
+
+Table contas {
+  id bigint [pk, increment]
+  cliente_id bigint [not null, ref: > clientes.id]
+  agencia char(4) [not null]
+  numero char(6) [not null]
+  saldo "numeric(15,2)" [not null, default: 0, note: 'CHECK saldo >= 0 (sem cheque especial)']
+  status text [not null, default: 'ativa', note: "CHECK in ('ativa','bloqueada','encerrada')"]
+  aberta_em timestamptz [not null, default: `now()`]
+
+  indexes {
+    (agencia, numero) [unique]
+    cliente_id [name: 'idx_contas_cliente']
+  }
+  Note: 'saldo = creditos - debitos, sempre (banco.auditoria() confere)'
+}
+
+Table transferencias {
+  id bigint [pk, increment]
+  chave_idempotencia uuid [not null, unique, note: 'gerada por quem pede; repetir a chave nao transfere de novo']
+  conta_origem_id bigint [not null, ref: > contas.id]
+  conta_destino_id bigint [not null, ref: > contas.id]
+  valor "numeric(15,2)" [not null, note: 'CHECK valor > 0']
+  descricao text
+  solicitada_em timestamptz [not null, default: `now()`]
+
+  indexes {
+    (conta_origem_id, solicitada_em) [name: 'idx_transferencias_origem']
+    (conta_destino_id, solicitada_em) [name: 'idx_transferencias_destino']
+  }
+  Note: 'CHECK conta_origem_id <> conta_destino_id'
+}
+
+Table lancamentos {
+  id bigint [pk, increment]
+  conta_id bigint [not null, ref: > contas.id]
+  transferencia_id bigint [ref: > transferencias.id, note: 'nulo = aporte (dinheiro vindo de fora)']
+  tipo char(1) [not null, note: "CHECK in ('C','D')"]
+  valor "numeric(15,2)" [not null, note: 'CHECK valor > 0']
+  criado_em timestamptz [not null, default: `now()`]
+
+  indexes {
+    (conta_id, criado_em) [name: 'idx_lancamentos_conta_data', note: 'extrato por conta e periodo']
+    transferencia_id [name: 'idx_lancamentos_transferencia']
+  }
+  Note: 'O extrato: 1 debito na origem + 1 credito no destino por transferencia'
+}

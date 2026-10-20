@@ -1,0 +1,51 @@
+# ==========================================================================
+# Banco Sudoers - Database Engineering (Bloco B5)
+#
+#   producao   PostgreSQL 17 - o banco do Banco Sudoers. Nasce com o banco
+#              banco_sudoers VAZIO: o Lab 1 cria o modelo e carrega os dados.
+#
+# Volumes (cada um com um papel, e separados de proposito):
+#   pg_producao  /var/lib/postgresql/data  os arquivos do banco
+#   backup       /backup                   as COPIAS (dumps)
+#   cofre        /cofre                    as CHAVES (backup, campos, AC do TLS)
+#
+# A porta 5470 foge da 5432 para nao colidir com um PostgreSQL instalado na
+# maquina e e publicada so em 127.0.0.1: a senha e de laboratorio.
+# ==========================================================================
+name: database_engineer_banco
+
+services:
+  producao:
+    image: postgres:17
+    container_name: dbb_producao
+    hostname: producao
+    entrypoint: ["bash", "/repo/infra/entrypoint.sh"]
+    command: ["postgres"]
+    stop_grace_period: 30s
+    environment:
+      TZ: America/Sao_Paulo
+      PGTZ: America/Sao_Paulo
+      # sem paginador no psql: um resultado longo no meio de um bloco colado
+      # abriria o "less", que engoliria os comandos seguintes
+      PSQL_PAGER: cat
+      POSTGRES_USER: sudoers
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: banco_sudoers
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+    ports:
+      - "127.0.0.1:${PORTA_PRODUCAO:-5470}:5432"
+    volumes:
+      - pg_producao:/var/lib/postgresql/data
+      - backup:/backup
+      - cofre:/cofre
+      - ./:/repo:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U sudoers -d banco_sudoers"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+
+volumes:
+  pg_producao:
+  backup:
+  cofre:
