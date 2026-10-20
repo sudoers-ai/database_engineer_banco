@@ -2,7 +2,7 @@
 
 > Copie para `entregas/inventario.md` e preencha. Todos os dados do banco
 > são **sintéticos**. As classificações, responsáveis e prazos que você
-> escrever são **hipóteses didáticas**: marque-as como tal e indique quem
+> escrever (inclusive a base legal) são **hipóteses didáticas**: marque-as como tal e indique quem
 > precisaria validar.
 
 **Equipe:** (preencha)
@@ -14,6 +14,7 @@
 | **Campo** | `tabela.coluna` |
 | **Origem** | de onde o dado vem: o cliente informou, o sistema gerou, outro sistema enviou |
 | **Finalidade** | para que o banco usa o dado. Dado sem finalidade é candidato a não ser coletado |
+| **Base legal** | a hipótese da LGPD (art. 7º) que autoriza o tratamento: execução de contrato, cumprimento de obrigação legal ou regulatória, consentimento... **Não invente enquadramento**: na dúvida, "a validar com Jurídico/Privacidade". Dado que não é pessoal: "não se aplica" |
 | **Classificação** | Pública / Interna / Confidencial / Restrita (escala didática abaixo) |
 | **Dado pessoal?** | sim / não / a validar. Se sim, identifica a pessoa sozinho ou combinado? |
 | **Responsável** | a área ou o papel que responde pelo dado (nunca "TI") |
@@ -34,26 +35,26 @@
 
 ## Exemplos (hipóteses didáticas)
 
-| Campo | Origem | Finalidade | Classificação | Dado pessoal? | Responsável | Quem acessa | Compartilhamento | Retenção | Descarte | Proteção atual |
-|---|---|---|---|---|---|---|---|---|---|---|
-| `clientes.cpf` | informado pelo cliente na abertura | identificar o titular | Restrita *(hipótese)* | sim, identifica sozinho | Produto Contas *(hipótese)* | `perfil_admin` (tabela); atendimento só mascarado (visão) | nenhum *(a validar)* | definir com Jurídico/Compliance | definir; lembrar dos backups | máscara na visão; app sem acesso à coluna; **em claro na tabela** |
-| `contas.saldo` | calculado pelo sistema | mostrar saldo; recusar transferência sem saldo | Confidencial *(hipótese)* | sim, combinado com a conta e o titular | Produto Contas *(hipótese)* | `perfil_aplicacao` (leitura), função `transferir` (escrita) | nenhum | definir com Jurídico/Compliance | definir | escrita só pela função |
-| `transferencias.chave_idempotencia` | gerado pelo app | não processar duas vezes a mesma solicitação | Interna *(hipótese)* | não | Engenharia do app *(hipótese)* | `perfil_aplicacao` | nenhum | enquanto a transferência existir | junto com a transferência | — |
+| Campo | Origem | Finalidade | Base legal | Classificação | Dado pessoal? | Responsável | Quem acessa | Compartilhamento | Retenção | Descarte | Proteção atual |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| `clientes.cpf` | informado pelo cliente na abertura | identificar o titular | a validar com Jurídico/Privacidade *(hipótese: obrigação legal ou regulatória e execução de contrato)* | Restrita *(hipótese)* | sim, identifica sozinho | Produto Contas *(hipótese)* | `perfil_admin` (tabela); atendimento só mascarado (visão) | nenhum *(a validar)* | definir com Jurídico/Compliance | definir; lembrar dos backups | máscara na visão; app sem acesso à coluna; **em claro na tabela** |
+| `contas.saldo` | calculado pelo sistema | mostrar saldo; recusar transferência sem saldo | a validar com Jurídico/Privacidade *(hipótese: execução de contrato)* | Confidencial *(hipótese)* | sim, combinado com a conta e o titular | Produto Contas *(hipótese)* | `perfil_aplicacao` (leitura), função `transferir` (escrita) | nenhum | definir com Jurídico/Compliance | definir | escrita só pela função |
+| `transferencias.chave_idempotencia` | gerado pelo app | não processar duas vezes a mesma solicitação | não se aplica (não é dado pessoal) | Interna *(hipótese)* | não | Engenharia do app *(hipótese)* | `perfil_aplicacao` | nenhum | enquanto a transferência existir | junto com a transferência | — |
 
 ## O inventário
 
-| Campo | Origem | Finalidade | Classificação | Dado pessoal? | Responsável | Quem acessa | Compartilhamento | Retenção | Descarte | Proteção atual |
-|---|---|---|---|---|---|---|---|---|---|---|
-| `clientes.id` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `clientes.nome` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `clientes.email` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `clientes.telefone` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `clientes.data_nascimento` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `clientes.renda_cifrada` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `clientes.criado_em` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `contas.agencia` + `contas.numero` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `transferencias.valor` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
-| `lancamentos` (a tabela) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| Campo | Origem | Finalidade | Base legal | Classificação | Dado pessoal? | Responsável | Quem acessa | Compartilhamento | Retenção | Descarte | Proteção atual |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| `clientes.id` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `clientes.nome` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `clientes.email` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `clientes.telefone` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `clientes.data_nascimento` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `clientes.renda_cifrada` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `clientes.criado_em` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `contas.agencia` + `contas.numero` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `transferencias.valor` | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
+| `lancamentos` (a tabela) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) | (preencha) |
 
 ## Perguntas em aberto
 

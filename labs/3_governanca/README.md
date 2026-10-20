@@ -86,8 +86,8 @@ que pediu)? Algum pedido deve ser recusado ou reduzido? Quem decide?
 ⏱️ 40 min · em equipe
 
 Não dá para proteger o que você não sabe que tem. O primeiro passo de
-governança é o **inventário**: cada campo, de onde vem, para que serve, quão
-sensível é e quem responde por ele.
+governança é o **inventário**: cada campo, de onde vem, para que serve, com
+que base legal, quão sensível é e quem responde por ele.
 
 O banco já sabe listar o que existe:
 
@@ -131,6 +131,7 @@ três linhas de exemplo. Algumas orientações:
 
 * **Classificação**: use a escala do template (Pública, Interna, Confidencial, Restrita). A escala é uma **hipótese didática**: cada instituição tem a sua;
 * **Dado pessoal**: um dado é pessoal quando identifica ou pode identificar uma pessoa, inclusive combinado com outros. Pela LGPD, a categoria "dado pessoal sensível" é uma lista fechada (origem racial, saúde, religião...). Dado financeiro não está nessa lista, mas tem outras proteções, como o **sigilo bancário**. Não invente enquadramento: na dúvida, escreva "a validar com Jurídico/Privacidade";
+* **Base legal** (coluna logo depois de Finalidade): a hipótese da LGPD que autoriza o tratamento (execução de contrato, obrigação legal ou regulatória, consentimento...). **Não invente enquadramento**: na dúvida, escreva "a validar com Jurídico/Privacidade". Campo que não é dado pessoal: "não se aplica";
 * **Retenção e descarte**: **não** invente prazos. Escreva "definir com Jurídico/Compliance" e, se quiser, a hipótese que você levaria para a reunião, marcada como hipótese;
 * **Responsável**: uma área ou um papel (ex.: "Produto Contas"), nunca "TI".
 

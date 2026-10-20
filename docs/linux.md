@@ -23,8 +23,9 @@ São quatro passos, cerca de 10 minutos.
 >
 > 🏢 **Computador da empresa, sem permissão para o Docker, ou Docker Hub
 > bloqueado?** Veja [Computador e rede da empresa](./ambiente_corporativo.md):
-> o Podman (Ubuntu 24.04) substitui os passos 1 e 2, e a imagem pode vir
-> do registro interno. Lá também está o que pedir à TI.
+> a imagem pode vir do registro interno, e lá também está o que pedir à TI.
+> O Podman aparece lá como **alternativa em validação**: só use depois que
+> o instrutor liberar.
 
 ---
 

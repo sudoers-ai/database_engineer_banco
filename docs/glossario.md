@@ -26,7 +26,7 @@
 | **`pg_hba.conf`** | Arquivo que decide quem conecta, de onde, em qual banco e como se autentica; a primeira regra que casa vence |
 | **`pgcrypto`** | Extensão do PostgreSQL com funções de criptografia, como `pgp_sym_encrypt` |
 | **Perfil (role sem login)** | Role que recebe privilégios; os usuários são membros dela e herdam os direitos |
-| **PITR** | *Point-in-time recovery*: restaurar o banco a um instante qualquer, com backup físico e arquivamento de WAL. Veja a [demonstração](../demos/pitr/README.md) |
+| **PITR** | *Point-in-time recovery*: restaurar o banco a um instante qualquer, com backup físico e arquivamento de WAL. Visto em conceito na Aula 03; há uma [demonstração opcional](../demos/pitr/README.md) para estudo |
 | **`PUBLIC`** | A role implícita "todo mundo". Por padrão pode conectar em qualquer banco e executar qualquer função |
 | **RBAC** | Controle de acesso baseado em papéis (perfis), e não em pessoas |
 | **RPO** | *Recovery Point Objective*: quanto dado se aceita perder num incidente |

@@ -169,6 +169,7 @@ EOF
     falhou "a renda ainda está em claro: falta renda_cifrada no lugar de renda_mensal (seção 2.11)"
   fi
   entrega relatorio_lab2.md "tempos, perda observada e controles"
+  entrega estrategia_backup.md "a estratégia desenhada na Aula 03"
   ;;
 # --------------------------------------------------------------------------
 3)

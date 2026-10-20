@@ -13,7 +13,7 @@
 |---|---|---|---|
 | Tema | Modelagem e implementação | Backup, recuperação e criptografia | Governança, acessos e consolidação |
 | Duração | 180 min | 180 min | 180 min (45 de apresentações) |
-| Entregáveis | `meu_modelo.dbml`, `adr.md` | `relatorio_lab2.md` | `inventario.md`, `checklist_controles.md`, `adr.md` revisado, apresentação |
+| Entregáveis | `meu_modelo.dbml`, `adr.md` | `relatorio_lab2.md` (e a `estrategia_backup.md` da Aula 03) | `inventario.md`, `checklist_controles.md`, `adr.md` revisado, apresentação |
 | Conferência automática | `make conferir l=1` | `make conferir l=2` | `make conferir l=3` |
 | Quem faltou | — | `make gabarito l=1` | `make gabarito l=2` |
 
@@ -27,7 +27,7 @@ controles de criptografia e documentação de governança**.
 |---|---|---|---|
 | Aula 01 — Padrões de acesso, relacional vs. não relacional | 01/12 | teórica | enunciado do caso (Lab 1, seção 1.1) e [template de ADR](../templates/adr.md) |
 | Aula 02 — Lab de modelagem | 03/12 | lab | [Lab 1](../labs/1_modelagem/README.md) |
-| Aula 03 — Ciclo de vida, backup e criptografia | 08/12 | teórica | [demonstração de WAL e PITR](../demos/pitr/README.md) |
+| Aula 03 — Ciclo de vida, backup e criptografia | 08/12 | teórica (WAL e PITR em conceito, com diagramas; sem demonstração prática) | [template da estratégia de backup, recuperação e criptografia](../templates/estrategia_backup.md) (entrega da aula, comparada com o medido no Lab 2, seção 2.12). Material **opcional** de estudo: [demonstração de WAL e PITR](../demos/pitr/README.md) |
 | Aula 04 — Lab de backup e criptografia | 10/12 | lab | [Lab 2](../labs/2_backup_criptografia/README.md), com revisão cruzada entre duplas (2.12) |
 | Aula 05 — Governança: BACEN, LGPD e PCI-DSS | 15/12 | teórica | demonstração de perfis com [`01_perfis.sql`](../labs/3_governanca/sql/01_perfis.sql) e [template do checklist](../templates/checklist_controles.md) |
 | Aula 06 — Lab LGPD e apresentação | 17/12 | lab | [Lab 3](../labs/3_governanca/README.md) |
@@ -42,7 +42,7 @@ usam só PostgreSQL.
 * [ ] Envie aos alunos o link do repositório e peça o **preflight** (README, "Começando em 5 minutos"): instalar Docker, `make preflight` terminando em **Pronto para o Lab 1**.
 * [ ] **Duas semanas antes**, mande à TI da empresa a lista [O que pedir à TI](../docs/ambiente_corporativo.md#o-que-pedir-à-ti): WSL2, `sudo`, sites liberados e o Docker escolhido.
 * [ ] Separe a turma nos **dois perfis**, Windows (WSL2) e Ubuntu, e confirme que cada aluno fez o guia do seu perfil.
-* [ ] Pergunte quem usa **computador corporativo**: o Docker Desktop exige licença paga em empresas grandes, e WSL, Docker ou o Docker Hub podem estar bloqueados. O guia [Computador e rede da empresa](../docs/ambiente_corporativo.md) tem as saídas: Docker Engine no WSL, Podman no Linux, imagem do registro interno (`IMAGEM_POSTGRES` no `.env`) ou em arquivo `.tar`.
+* [ ] Pergunte quem usa **computador corporativo**: o Docker Desktop exige licença paga em empresas grandes, e WSL, Docker ou o Docker Hub podem estar bloqueados. O guia [Computador e rede da empresa](../docs/ambiente_corporativo.md) tem as saídas: Docker Engine no WSL, Podman no Ubuntu (**alternativa em validação**: libere para a turma só depois de rodar a trilha completa com ele, `make limpar SIM=1 && python3 tests/seguir_trilha.py`, numa máquina com Podman), imagem do registro interno (`IMAGEM_POSTGRES` no `.env`) ou em arquivo `.tar`.
 * [ ] Se o Docker Hub estiver bloqueado na rede da turma, obtenha com a TI o endereço do registro interno **ou** gere o `postgres17.tar` (`docker save`) e distribua antes da aula.
 * [ ] Confirme que `https://dbdiagram.io` abre na rede da sala. Se não abrir, o Lab 1 funciona com o diagrama Mermaid do roteiro e o `.dbml` no editor.
 
@@ -78,9 +78,9 @@ usam só PostgreSQL.
 | 15–45 | 2.2–2.3 | `pg_dump`, `globais`, sumário; `make carga t=20` | anotar a hora do backup e o número da carga |
 | 45–80 | 2.4–2.7 | incidente, restauração isolada, `pg_restore -L`, perda medida, conciliação, RTO | a conciliação só funcionou por causa do **modelo**, não do backup |
 | 80–110 | 2.8–2.9 | dump em claro lido; chave no cofre; `gpg`; "ladrão" do volume; adulteração; restauração cifrada | compactação não é criptografia; perder a chave = perder o backup |
-| 110–140 | 2.10 | AC, CSR, certificado, `ssl=on`, `pg_hba`, testes negativo e positivos | `require` cifra, mas não protege contra impostor |
+| 110–140 | 2.10 | AC, CSR, certificado (**de treinamento, gerados no próprio lab**), `ssl=on`, `pg_hba`, testes negativo e positivos | `require` cifra, mas não protege contra impostor. Deixe claro que em produção o certificado vem da AC da empresa |
 | 140–160 | 2.11 | CPF achado no arquivo da tabela; renda com `pgcrypto`; limites; volume cifrado | **não** deixar a turma sair achando que "o banco está criptografado" |
-| 160–180 | 2.12 | relatório; **revisão cruzada entre duplas** (seção 7 do relatório); `make conferir l=2`; discussão | a revisão cruzada é exigida pelo cronograma: garanta os 10 min. A pergunta 1 retoma a demonstração de PITR da Aula 03 |
+| 160–180 | 2.12 | relatório; **revisão cruzada entre duplas** (seção 7 do relatório); `make conferir l=2`; discussão | a revisão cruzada é exigida pelo cronograma: garanta os 10 min. A pergunta 1 retoma o PITR visto em conceito na Aula 03. A seção 8 do relatório compara com a estratégia desenhada na Aula 03 |
 
 ### Lab 3 — 180 min
 
@@ -134,7 +134,8 @@ entendimento, não as palavras exatas.
 * A chave dos campos passa pelo SQL (variável do psql). Em produção, a cifragem costuma ficar na aplicação, com a chave vinda de um KMS.
 * As senhas dos usuários do Lab 3 são de laboratório e ficam no `~/.pgpass` do container.
 * O backup cifrado da seção 2.8 é anterior à cifragem da renda: ele guarda a renda em claro (cifrada pelo `gpg`). Isso é discutido no roteiro.
-* Backup físico (`pg_basebackup`) e PITR não estão nos labs: são mostrados pelo instrutor na **Aula 03** (teórica), com o roteiro [demos/pitr](../demos/pitr/README.md) (~30 min, numa cópia da produção, sem mexer no banco dos labs). Rode a demonstração uma vez na véspera.
+* Backup físico (`pg_basebackup`) e PITR não estão nos labs: a **Aula 03** os explica em conceito, com diagramas, sem demonstração prática. O roteiro [demos/pitr](../demos/pitr/README.md) fica como material **opcional** de estudo (~30 min, numa cópia da produção, sem mexer no banco dos labs); não é mostrado em aula nem avaliado.
+* Os certificados do Lab 2 (AC e servidor) são **de treinamento, gerados no próprio lab** com `openssl`. Não valem fora do container e não substituem os certificados da AC da empresa.
 * Os tempos (`real`, `EXPLAIN`, RTO) dependem da máquina. As saídas dos roteiros vêm de uma execução real; os números dos alunos serão outros.
 
 ## Manutenção

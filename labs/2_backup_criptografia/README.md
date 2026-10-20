@@ -623,6 +623,13 @@ O backup cifrado volta íntegro. O dado decifrado passou direto para o
 
 ⏱️ 30 min
 
+> 🎓 **Certificados de treinamento, gerados no próprio lab.** A autoridade
+> certificadora (AC) e o certificado do servidor desta seção são criados por
+> você, com `openssl`, só para este laboratório. Eles não valem fora do
+> container e não substituem os certificados que a AC da empresa emite em
+> produção. O que se aprende é o mecanismo: quem assina, o que o cliente
+> confere e por que o `verify-full` importa.
+
 O backup está protegido. E o caminho entre o app e o banco? Hoje, quem
 conecta pela rede conversa **em claro**: senha e dados passam legíveis por
 qualquer equipamento no caminho. Confira: conecte pela rede (`host=producao`)
@@ -958,6 +965,30 @@ Sudoers.
 Complete o `entregas/relatorio_lab2.md` até a seção 6: os tempos, a perda
 observada, a comparação com as metas da seção 2.1 e onde está cada chave.
 
+### Desenhado × medido (5 min)
+
+Abra a estratégia que a equipe desenhou na Aula 03
+(`entregas/estrategia_backup.md`, feita a partir de
+[`templates/estrategia_backup.md`](../../templates/estrategia_backup.md)) e
+compare com o que você **mediu** hoje. Ainda não tem o arquivo? Copie o
+template e preencha com a equipe (o `-n` não sobrescreve o que já existe):
+
+🖥️ **No seu terminal:**
+
+<!-- rodar: shell -->
+```bash
+cp -n templates/estrategia_backup.md entregas/estrategia_backup.md
+```
+
+Depois preencha a seção 8 do relatório:
+
+* o RPO e o RTO medidos cumpririam as metas que a equipe definiu?
+* o backup que você fez hoje (lógico, diário) é o tipo que a estratégia previa? O que faltaria (físico, WAL arquivado)?
+* as chaves ficaram onde a estratégia dizia? Alguma decisão do desenho não funcionou na prática?
+
+Diferença entre o desenho e a medição não é erro: é o que a estratégia
+precisa corrigir. Anote o que muda.
+
 ### A revisão da dupla (10 min)
 
 Decisão de segurança que ninguém revisou é decisão de uma pessoa só. Troque
@@ -1005,6 +1036,7 @@ Conferindo o Lab 2 - Backup, recuperação e criptografia
   ✅ conexão com verify-full: certificado e nome do servidor validados
   ✅ renda guardada cifrada (renda_cifrada) e a chave do cofre abre
   ✅ entregável: entregas/relatorio_lab2.md
+  ✅ entregável: entregas/estrategia_backup.md
 
 ✅ Lab 2 conferido.
 ```
@@ -1014,7 +1046,7 @@ Saia do psql (`\q`) e do terminal do servidor (`exit`). Ao fim da aula:
 
 ### Para a discussão
 
-1. A perda observada cumpriu a meta de RPO de 5 minutos? Com um dump por noite, qual seria o RPO? (A resposta leva ao **PITR**, a recuperação até um instante qualquer com arquivamento de WAL, mostrada na [demonstração da Aula 03](../../demos/pitr/README.md).)
+1. A perda observada cumpriu a meta de RPO de 5 minutos? Com um dump por noite, qual seria o RPO? (A resposta leva ao **PITR**, a recuperação até um instante qualquer com arquivamento de WAL, visto em conceito na Aula 03. Quer vê-lo funcionando? Há uma [demonstração opcional](../../demos/pitr/README.md), para estudar por conta própria.)
 2. O RTO medido inclui ler o roteiro e decidir. O que você automatizaria para cumprir os 30 minutos num banco de 1 TB?
 3. Onde ficaria cada chave (backup, campos, AC) num banco de verdade? Quem teria acesso a cada uma?
 
@@ -1024,7 +1056,8 @@ Saia do psql (`\q`) e do terminal do servidor (`exit`). Ao fim da aula:
 
 | Entregável | Onde | O que se avalia |
 |---|---|---|
-| Relatório de recuperação | `entregas/relatorio_lab2.md` | tempos e perda medidos, comparação honesta com as metas, local de cada chave |
+| Relatório de recuperação | `entregas/relatorio_lab2.md` | tempos e perda medidos, comparação honesta com as metas, local de cada chave, desenhado × medido (seção 8) |
+| Estratégia desenhada (Aula 03) | `entregas/estrategia_backup.md` | metas com origem, tipos de backup, teste de restauração, criptografia e chaves, riscos |
 | Recuperação comprovada | `make conferir l=2` | cópia isolada e produção com as 4 invariantes fechando |
 | Controles de criptografia | `make conferir l=2` | backup cifrado e restaurável, TLS com `verify-full`, renda cifrada |
 

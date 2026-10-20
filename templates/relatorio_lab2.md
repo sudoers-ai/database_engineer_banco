@@ -78,3 +78,15 @@ Quem revisou este relatório (e conferiu na tela de quem o escreveu):
 | 6 | Qual o maior risco que continua aberto, e quem decide sobre ele? | (preencha) | — |
 
 **Achado mais importante da revisão e o que foi feito com ele:** (preencha)
+
+## 8. Desenhado × medido (seção 2.12)
+
+Compare com a estratégia da Aula 03 (`entregas/estrategia_backup.md`).
+
+| Item | Na estratégia (desenhado) | No lab (medido ou feito) | O que muda na estratégia |
+|---|---|---|---|
+| RPO | (preencha) | (preencha) | (preencha) |
+| RTO | (preencha) | (preencha) | (preencha) |
+| Tipo e frequência do backup | (preencha) | (preencha) | (preencha) |
+| Teste de restauração | (preencha) | (preencha) | (preencha) |
+| Onde ficaram as chaves | (preencha) | (preencha) | (preencha) |

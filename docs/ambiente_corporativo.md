@@ -9,7 +9,7 @@ WSL2) e **Ubuntu**. Na empresa, cinco coisas costumam travar:
 | Situação | Sintoma | Solução |
 |---|---|---|
 | Falta permissão de administrador | `wsl --install` ou `sudo apt install` recusados | [o que pedir à TI](#o-que-pedir-à-ti) |
-| O Docker Desktop exige licença paga | instalação bloqueada ou proibida pela TI | Windows: [Docker Engine dentro do Ubuntu](./windows.md#opção-b--docker-engine-dentro-do-ubuntu-sem-docker-desktop). Ubuntu: o [Docker Engine](./linux.md) já é gratuito; ou o [Podman](#ubuntu-podman-no-lugar-do-docker) |
+| O Docker Desktop exige licença paga | instalação bloqueada ou proibida pela TI | Windows: [Docker Engine dentro do Ubuntu](./windows.md#opção-b--docker-engine-dentro-do-ubuntu-sem-docker-desktop). Ubuntu: o [Docker Engine](./linux.md) já é gratuito. O [Podman](#ubuntu-podman-alternativa-em-validação) está em validação |
 | O Docker Hub está bloqueado | `make preflight` para em `failed to resolve reference "docker.io/library/postgres:17"`, `Forbidden` ou `timeout` | [imagem do registro interno](#a-imagem-do-postgresql-vem-de-outro-lugar) ou [arquivo `.tar`](#sem-registro-nenhum-a-imagem-em-arquivo) |
 | Há proxy na saída para a internet | `git clone`, `apt` ou `docker pull` ficam sem resposta | [proxy](#proxy-corporativo) |
 | A rede inspeciona o HTTPS | `x509: certificate signed by unknown authority` | [certificado da empresa](#a-rede-inspeciona-o-https) |
@@ -20,8 +20,9 @@ WSL2) e **Ubuntu**. Na empresa, cinco coisas costumam travar:
 
 > **Licença, em uma frase:** o que é pago em empresa grande é o **Docker
 > Desktop** (o programa com a baleia). O **Docker Engine** (o serviço do
-> Linux) e o **Podman** são gratuitos e de código aberto. Os dois rodam esta
-> trilha.
+> Linux) é gratuito, de código aberto, e é o caminho recomendado nos dois
+> perfis. O Podman também é gratuito, mas ainda é uma alternativa em
+> validação.
 
 ---
 
@@ -55,12 +56,17 @@ em `127.0.0.1:5470`, dentro da própria máquina.
 
 ---
 
-## Ubuntu: Podman no lugar do Docker
+## Ubuntu: Podman (alternativa em validação)
 
-Para quem prefere (ou a TI exige) o **Podman**: ele roda os containers sem
-um serviço como root. Com o pacote `podman-docker`, o comando `docker` passa
-a chamar o Podman, e **todos os comandos da trilha funcionam sem mudança**.
-Ele substitui os passos 1 e 2 do [guia do Ubuntu](./linux.md).
+> ⚠️ **Alternativa em validação.** Use o Podman **só depois que o instrutor
+> rodar a trilha completa com ele e liberar para a turma**. Até lá, use o
+> Docker Engine do [guia do Ubuntu](./linux.md) (ou, no Windows, a
+> [opção B](./windows.md#opção-b--docker-engine-dentro-do-ubuntu-sem-docker-desktop)).
+
+O **Podman** roda os containers sem um serviço como root. Com o pacote
+`podman-docker`, o comando `docker` passa a chamar o Podman. Os passos
+abaixo ficam aqui para a validação e para depois dela; quando liberado, eles
+substituem os passos 1 e 2 do [guia do Ubuntu](./linux.md).
 
 > **Só no Ubuntu 24.04 ou mais novo.** O Podman do 22.04 (versão 3.4) não
 > tem o `docker compose`. No 22.04, use o Docker Engine do
@@ -162,8 +168,7 @@ docker image ls | grep postgres                # tem que aparecer postgres 17
 
 No Windows, copie o `.tar` para dentro do Ubuntu antes (ex.:
 `cp /mnt/c/Users/SEU_USUARIO/Downloads/postgres17.tar ~/`). Depois
-`make preflight` usa a imagem carregada, sem acessar a internet. Funciona
-igual com Docker e com Podman.
+`make preflight` usa a imagem carregada, sem acessar a internet.
 
 ---
 
@@ -204,7 +209,7 @@ printf '[Service]\nEnvironment="HTTP_PROXY=http://proxy.suaempresa.com.br:8080" 
 sudo systemctl daemon-reload && sudo systemctl restart docker
 ```
 
-**Ou, com Podman**, o serviço do Podman (é ele que baixa a imagem para o
+**Ou, com Podman** (alternativa em validação), o serviço do Podman (é ele que baixa a imagem para o
 `docker compose`):
 
 ```bash
