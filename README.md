@@ -67,35 +67,51 @@ propósito:
 > **Você não precisa instalar PostgreSQL nem cliente nenhum.** Tudo roda
 > dentro do container.
 
-Escolha o guia do seu sistema. Cada um instala o Docker, o `make` e o `git`
-do zero, passo a passo, e baixa o repositório no lugar certo. Você faz uma
-vez só, **antes da primeira aula**:
+A turma tem **dois perfis**: quem usa **Windows** e quem usa **Linux**. Os
+labs são os mesmos para os dois; o que muda é a preparação da máquina e o
+terminal onde você digita. Escolha o seu e faça o guia uma vez só, **antes
+da primeira aula**:
 
-| Sistema | Guia | Tempo |
-|---|---|---|
-| 🪟 Windows 10 ou 11 | **[Preparando o Windows](./docs/windows.md)** (WSL2 + Docker Desktop) | ~20 min |
-| 🍎 Mac (Apple Silicon ou Intel) | **[Preparando o Mac](./docs/mac.md)** (Docker Desktop) | ~15 min |
-| 🐧 Linux (Ubuntu, Debian, Fedora) | **[Preparando o Linux](./docs/linux.md)** (Docker Engine) | ~10 min |
+| Perfil | Guia de preparação | Onde você digita os comandos | Tempo |
+|---|---|---|---|
+| 🪟 **Windows 10 ou 11** | **[Preparando o Windows](./docs/windows.md)** (WSL2 + Docker) | no terminal do **Ubuntu (WSL)**, nunca no PowerShell | ~20 min |
+| 🐧 **Linux** (Ubuntu, Debian, Fedora) | **[Preparando o Linux](./docs/linux.md)** (Docker Engine ou Podman) | no terminal do sistema | ~10 min |
+
+> 🏢 **Computador ou rede da empresa?** Docker Desktop sem licença, Docker
+> Hub bloqueado, proxy: veja **[Computador e rede da empresa](./docs/ambiente_corporativo.md)**
+> antes de começar. Tem as alternativas (Docker Engine no WSL, Podman,
+> imagem do registro interno ou em arquivo).
 
 Ao terminar o guia, volte para cá e continue do passo
 [3. Confira o terreno](#3-confira-o-terreno).
 
-### 🪟 Estou no Windows
+### 🪟 Perfil Windows
 
-> ⚠️ No Windows, **todos os comandos da trilha são digitados no terminal do
-> Ubuntu (WSL)**, nunca no PowerShell. O [guia](./docs/windows.md) explica
-> por quê.
+* Tudo roda dentro do **WSL2** (um Ubuntu dentro do Windows). Depois de
+  instalado, **todos os comandos da trilha são digitados no terminal do
+  Ubuntu**, nunca no PowerShell nem no Prompt de Comando: eles não têm
+  `make` e não rodam os scripts.
+* O repositório fica **dentro do Ubuntu** (`~/database_engineer_banco`), não
+  numa pasta do Windows (`/mnt/c/...`).
+* Para editar as entregas, abra a pasta no VS Code a partir do Ubuntu, com
+  `code .` (o VS Code instala sozinho a extensão do WSL), ou no Explorador
+  de Arquivos com `explorer.exe .`.
 
-### 🍎🐧 Já tenho o Docker
+### 🐧 Perfil Linux
 
-Se o `docker compose version` (com espaço) já responde com um número de
-versão, falta só o `make`, que não vem com o Docker:
+* O Docker roda direto no sistema: é o caminho mais simples.
+* Se você já tem Docker, confira com `docker compose version` (com espaço).
+  Se responder com um número de versão, falta só o `make`:
 
-| Sistema | Como instalar |
-|---|---|
-| Ubuntu / Debian | `sudo apt update && sudo apt install make` |
-| Fedora | `sudo dnf install make` |
-| Mac | `xcode-select --install` |
+  | Distribuição | Como instalar |
+  |---|---|
+  | Ubuntu / Debian | `sudo apt update && sudo apt install make` |
+  | Fedora | `sudo dnf install make` |
+
+* Sem permissão para instalar o Docker? O [Podman](./docs/ambiente_corporativo.md#linux-podman-no-lugar-do-docker)
+  funciona com os mesmos comandos.
+
+> Usa Mac? Não é um perfil da turma, mas há um [guia](./docs/mac.md).
 
 Se você tem um PostgreSQL instalado na máquina, ele **não atrapalha**: a
 porta deste repositório (5470) é outra.
@@ -134,8 +150,8 @@ Se aparecer `make: command not found` (ou `comando não encontrado`):
 
 * **no Windows**, você provavelmente está no PowerShell. Abra o terminal do
   **Ubuntu** e veja o [guia de preparação](./docs/windows.md);
-* **no Linux ou no Mac**, instale com o comando da tabela
-  [logo acima](#-já-tenho-o-docker) e repita este passo.
+* **no Linux**, instale com o comando da tabela do
+  [perfil Linux](#-perfil-linux) e repita este passo.
 
 ### 3. Confira o terreno
 
@@ -243,6 +259,18 @@ Todo bloco de comando dos roteiros diz **onde** ele deve ser colado:
 > **Dica:** deixe três janelas abertas: o seu terminal, o psql e o terminal
 > do servidor. Errar de janela é o erro número 1 desta disciplina.
 
+### O começo de cada aula, em cada perfil
+
+| | 🪟 Windows | 🐧 Linux |
+|---|---|---|
+| 1. Ligar o Docker | abra o **Docker Desktop** e espere a baleia parar (com Docker Engine no WSL, ele sobe sozinho) | já está ligado (se não: `sudo systemctl start docker`) |
+| 2. Abrir o terminal | menu Iniciar → **Ubuntu** | o terminal do sistema |
+| 3. Entrar na pasta | `cd ~/database_engineer_banco` | `cd ~/database_engineer_banco` (ou onde você clonou) |
+| 4. Subir e ver onde parou | `make subir && make status` | `make subir && make status` |
+| Mais terminais | nova aba do Windows Terminal → Ubuntu, e o `cd` do passo 3 | nova aba do terminal, e o `cd` do passo 3 |
+| Colar blocos de comando | `Ctrl+Shift+V` ou botão direito | `Ctrl+Shift+V` |
+| Editar as entregas | `code .` ou `explorer.exe .` no Ubuntu | o editor que preferir |
+
 Cada roteiro começa com uma tabela de tempo e termina com o
 `make conferir`, que confere o estado do banco (não o que você digitou).
 
@@ -296,9 +324,11 @@ Deixe seu like e comentário nos vídeos do YouTube, isso ajuda e incentiva noss
 * [❓ FAQ de aula](./docs/faq.md) — erros comuns e como resolver
 * [⌨️ Comandos](./docs/comandos.md) — todo `make` e o `docker` equivalente
 * [🧩 Modelo de referência em DBML](./modelo/banco_sudoers.dbml) — para colar no dbdiagram.io
+* [🎬 Demonstração de WAL e PITR](./demos/pitr/README.md) — a recuperação até um instante, mostrada na aula de ciclo de vida e backup
 * [📝 Templates dos entregáveis](./templates/) — ADR, relatório, inventário e checklist
-* [🪟 Windows](./docs/windows.md) · [🍎 Mac](./docs/mac.md) · [🐧 Linux](./docs/linux.md) — preparação, passo a passo
-* [👩‍🏫 Material do instrutor](./instrutor/README.md) — preparação, cronograma, gabarito e avaliação
+* [🪟 Windows](./docs/windows.md) · [🐧 Linux](./docs/linux.md) — preparação, passo a passo, para os dois perfis da turma
+* [🏢 Computador e rede da empresa](./docs/ambiente_corporativo.md) — Docker Engine no WSL, Podman, registro interno, proxy
+* [👩‍🏫 Material do instrutor](./instrutor/README.md) — preparação, os seis encontros, demonstração de PITR e avaliação
 
 ---
 

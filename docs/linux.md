@@ -20,6 +20,10 @@ São quatro passos, cerca de 10 minutos.
 
 > **Já tem Docker?** Confira com `docker compose version` (com espaço). Se
 > responder com um número de versão, pule para o passo 3.
+>
+> 🏢 **Computador da empresa, sem permissão para o Docker, ou Docker Hub
+> bloqueado?** Veja [Computador e rede da empresa](./ambiente_corporativo.md):
+> o Podman substitui os passos 1 e 2, e a imagem pode vir do registro interno.
 
 ---
 

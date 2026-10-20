@@ -28,9 +28,9 @@ com o banco e um dado sensível guardado no disco.
 | [2.2](#22-o-backup-lógico) e [2.3](#23-a-vida-segue) | Backup lógico | 30 min |
 | [2.4](#24-o-incidente) a [2.7](#27-conciliação-e-o-rto) | Incidente e restauração isolada | 35 min |
 | [2.8](#28-cifrando-o-backup) e [2.9](#29-restaurando-o-backup-cifrado) | Criptografia do backup e recuperação | 30 min |
-| [2.10](#210-conexão-com-tls) | Conexão TLS | 35 min |
+| [2.10](#210-conexão-com-tls) | Conexão TLS | 30 min |
 | [2.11](#211-proteção-em-repouso) | Proteção em repouso e gestão das chaves | 20 min |
-| [2.12](#212-revisão-e-evidências) | Revisão e evidências | 15 min |
+| [2.12](#212-revisão-cruzada-e-evidências) | Revisão cruzada entre duplas e evidências | 20 min |
 
 ---
 
@@ -50,6 +50,11 @@ Toda estratégia de backup responde a duas perguntas:
 > instituição, e são aprovadas pelas áreas responsáveis.
 
 Copie o template do relatório, que você vai preenchendo ao longo do lab:
+
+> **Antes de tudo, no seu perfil:** 🪟 **Windows**: abra o Docker Desktop
+> (se usa) e o terminal do **Ubuntu**. 🐧 **Linux**: abra o terminal. Nos
+> dois, entre na pasta com `cd ~/database_engineer_banco`. O passo a passo
+> está em [o começo de cada aula](../../README.md#o-começo-de-cada-aula-em-cada-perfil).
 
 🖥️ **No seu terminal:**
 
@@ -522,7 +527,7 @@ monta o volume num container qualquer e tenta ler.
 
 <!-- rodar: shell falha-esperada -->
 ```bash
-docker run --rm -v database_engineer_banco_backup:/backup postgres:17 \
+docker run --rm -v database_engineer_banco_backup:/backup "$(docker inspect -f '{{.Config.Image}}' dbb_producao)" \
   bash -c "ls /backup/dumps; head -c 64 /backup/dumps/banco_sudoers.dump.gpg | od -c | head -2; pg_restore -l /backup/dumps/banco_sudoers.dump.gpg"
 ```
 
@@ -616,7 +621,7 @@ O backup cifrado volta íntegro. O dado decifrado passou direto para o
 
 ## 2.10 Conexão com TLS
 
-⏱️ 35 min
+⏱️ 30 min
 
 O backup está protegido. E o caminho entre o app e o banco? Hoje, quem
 conecta pela rede conversa **em claro**: senha e dados passam legíveis por
@@ -946,12 +951,38 @@ Sudoers.
 
 ---
 
-## 2.12 Revisão e evidências
+## 2.12 Revisão cruzada e evidências
 
-⏱️ 15 min
+⏱️ 20 min · em dupla
 
-Complete o `entregas/relatorio_lab2.md`: os tempos, a perda observada, a
-comparação com as metas da seção 2.1 e onde está cada chave. Depois confira:
+Complete o `entregas/relatorio_lab2.md` até a seção 6: os tempos, a perda
+observada, a comparação com as metas da seção 2.1 e onde está cada chave.
+
+### A revisão da dupla (10 min)
+
+Decisão de segurança que ninguém revisou é decisão de uma pessoa só. Troque
+de relatório com a sua dupla. Cada um revisa o do outro, **olhando a tela de
+quem escreveu**: quem é revisado roda os comandos, o revisor confere. Use as
+perguntas da seção 7 do template:
+
+| # | O revisor pergunta | Quem é revisado mostra |
+|---|---|---|
+| 1 | RPO e RTO foram medidos e comparados com as metas? | as seções 3 e 4 do relatório |
+| 2 | Alguma chave mora junto da cópia que ela protege? | `ls -l /backup/dumps /cofre /cofre/ac` no terminal do servidor |
+| 3 | Sobrou cópia em claro no storage de backup? | o mesmo `ls`: só `.gpg` e `globais.sql` |
+| 4 | O backup cifrado foi restaurado e conferido? | a auditoria da `banco_restaurado` (seção 2.9) |
+| 5 | Sem TLS é recusado? O `verify-full` confere o nome? | os dois testes da seção 2.10 |
+| 6 | Qual o maior risco aberto, e quem decide? | a seção 6 do relatório |
+
+O revisor anota as respostas e o achado mais importante na seção 7 do
+relatório **do colega**, com o próprio nome. Discordaram? Ótimo: registre a
+discordância. Ela é assunto para a apresentação do Lab 3.
+
+> **Exemplo de achado útil:** "A chave da AC (`ac.key`) está no mesmo cofre
+> da chave do backup: quem leva o cofre emite certificados **e** abre os
+> backups. Proposta: separar, com responsáveis diferentes."
+
+Depois confira:
 
 🖥️ **No seu terminal:**
 
@@ -983,7 +1014,7 @@ Saia do psql (`\q`) e do terminal do servidor (`exit`). Ao fim da aula:
 
 ### Para a discussão
 
-1. A perda observada cumpriu a meta de RPO de 5 minutos? Com um dump por noite, qual seria o RPO? (A resposta leva ao **PITR**, a recuperação até um instante qualquer com arquivamento de WAL. Fica como estudo complementar.)
+1. A perda observada cumpriu a meta de RPO de 5 minutos? Com um dump por noite, qual seria o RPO? (A resposta leva ao **PITR**, a recuperação até um instante qualquer com arquivamento de WAL, mostrada na [demonstração da Aula 03](../../demos/pitr/README.md).)
 2. O RTO medido inclui ler o roteiro e decidir. O que você automatizaria para cumprir os 30 minutos num banco de 1 TB?
 3. Onde ficaria cada chave (backup, campos, AC) num banco de verdade? Quem teria acesso a cada uma?
 

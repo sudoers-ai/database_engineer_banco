@@ -88,9 +88,10 @@ Os dois têm que responder com um número de versão.
 > educacional e em empresas pequenas, mas **empresas grandes precisam de
 > assinatura paga**, e notebooks corporativos costumam bloquear a instalação
 > do WSL ou do Docker. Se for o seu caso, fale com o instrutor **antes** da
-> primeira aula. Uma alternativa gratuita é instalar o Docker Engine direto
-> no Ubuntu do WSL, com os passos 1 e 2 do [guia do Linux](./linux.md), sem
-> o Docker Desktop.
+> primeira aula. A alternativa gratuita é o **Docker Engine direto no Ubuntu
+> do WSL**, sem o Docker Desktop: o passo a passo, e o que fazer se o Docker
+> Hub estiver bloqueado, está em
+> [Computador e rede da empresa](./ambiente_corporativo.md#windows-docker-engine-dentro-do-wsl-sem-docker-desktop).
 
 ---
 

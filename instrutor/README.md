@@ -1,10 +1,11 @@
 # 👩‍🏫 Material do instrutor
 
-> ⬅️ [README principal](../README.md) · Gabarito: [gabarito.md](./gabarito.md)
+> ⬅️ [README principal](../README.md)
 
-> ⚠️ **Visibilidade.** Esta pasta está no mesmo repositório dos alunos. Se o
-> repositório for público, mova `instrutor/gabarito.md` para um repositório
-> privado antes de divulgar o link à turma.
+> 🔒 **Gabarito.** As respostas esperadas (modelo, ADR, relatório do Lab 2,
+> inventário, checklist, perguntas individuais e discussão do PITR) ficam no
+> arquivo `gabarito_instrutor_B5.md`, guardado **fora deste repositório**
+> (que é público e é o mesmo dos alunos). Peça o arquivo à coordenação.
 
 ## Visão geral
 
@@ -20,12 +21,28 @@ Critério de sucesso da trilha: a turma entrega **modelo de dados,
 justificativa das decisões, banco implementado, recuperação comprovada,
 controles de criptografia e documentação de governança**.
 
+### Os seis encontros do bloco e o material de cada um
+
+| Encontro | Data | Tipo | Material neste repositório |
+|---|---|---|---|
+| Aula 01 — Padrões de acesso, relacional vs. não relacional | 01/12 | teórica | enunciado do caso (Lab 1, seção 1.1) e [template de ADR](../templates/adr.md) |
+| Aula 02 — Lab de modelagem | 03/12 | lab | [Lab 1](../labs/1_modelagem/README.md) |
+| Aula 03 — Ciclo de vida, backup e criptografia | 08/12 | teórica | [demonstração de WAL e PITR](../demos/pitr/README.md) |
+| Aula 04 — Lab de backup e criptografia | 10/12 | lab | [Lab 2](../labs/2_backup_criptografia/README.md), com revisão cruzada entre duplas (2.12) |
+| Aula 05 — Governança: BACEN, LGPD e PCI-DSS | 15/12 | teórica | demonstração de perfis com [`01_perfis.sql`](../labs/3_governanca/sql/01_perfis.sql) e [template do checklist](../templates/checklist_controles.md) |
+| Aula 06 — Lab LGPD e apresentação | 17/12 | lab | [Lab 3](../labs/3_governanca/README.md) |
+
+Os bancos não relacionais são apresentados na Aula 01, em conceito; os labs
+usam só PostgreSQL.
+
 ## Preparação
 
 ### Uma semana antes
 
 * [ ] Envie aos alunos o link do repositório e peça o **preflight** (README, "Começando em 5 minutos"): instalar Docker, `make preflight` terminando em **Pronto para o Lab 1**.
-* [ ] Pergunte quem usa **computador corporativo**: o Docker Desktop exige licença paga em empresas grandes, e WSL ou Docker podem estar bloqueados. Combine máquinas alternativas (laboratório, máquina pessoal) ou o Docker Engine direto no WSL (guia do Linux, passos 1 e 2).
+* [ ] Separe a turma nos **dois perfis**, Windows (WSL2) e Linux, e confirme que cada aluno fez o guia do seu perfil.
+* [ ] Pergunte quem usa **computador corporativo**: o Docker Desktop exige licença paga em empresas grandes, e WSL, Docker ou o Docker Hub podem estar bloqueados. O guia [Computador e rede da empresa](../docs/ambiente_corporativo.md) tem as saídas: Docker Engine no WSL, Podman no Linux, imagem do registro interno (`IMAGEM_POSTGRES` no `.env`) ou em arquivo `.tar`.
+* [ ] Se o Docker Hub estiver bloqueado na rede da turma, obtenha com a TI o endereço do registro interno **ou** gere o `postgres17.tar` (`docker save`) e distribua antes da aula.
 * [ ] Confirme que `https://dbdiagram.io` abre na rede da sala. Se não abrir, o Lab 1 funciona com o diagrama Mermaid do roteiro e o `.dbml` no editor.
 
 ### Na véspera de cada aula
@@ -60,9 +77,9 @@ controles de criptografia e documentação de governança**.
 | 15–45 | 2.2–2.3 | `pg_dump`, `globais`, sumário; `make carga t=20` | anotar a hora do backup e o número da carga |
 | 45–80 | 2.4–2.7 | incidente, restauração isolada, `pg_restore -L`, perda medida, conciliação, RTO | a conciliação só funcionou por causa do **modelo**, não do backup |
 | 80–110 | 2.8–2.9 | dump em claro lido; chave no cofre; `gpg`; "ladrão" do volume; adulteração; restauração cifrada | compactação não é criptografia; perder a chave = perder o backup |
-| 110–145 | 2.10 | AC, CSR, certificado, `ssl=on`, `pg_hba`, testes negativo e positivos | `require` cifra, mas não protege contra impostor |
-| 145–165 | 2.11 | CPF achado no arquivo da tabela; renda com `pgcrypto`; limites; volume cifrado | **não** deixar a turma sair achando que "o banco está criptografado" |
-| 165–180 | 2.12 | relatório + `make conferir l=2` + discussão | pergunta 1 da discussão abre o PITR como estudo complementar |
+| 110–140 | 2.10 | AC, CSR, certificado, `ssl=on`, `pg_hba`, testes negativo e positivos | `require` cifra, mas não protege contra impostor |
+| 140–160 | 2.11 | CPF achado no arquivo da tabela; renda com `pgcrypto`; limites; volume cifrado | **não** deixar a turma sair achando que "o banco está criptografado" |
+| 160–180 | 2.12 | relatório; **revisão cruzada entre duplas** (seção 7 do relatório); `make conferir l=2`; discussão | a revisão cruzada é exigida pelo cronograma: garanta os 10 min. A pergunta 1 retoma a demonstração de PITR da Aula 03 |
 
 ### Lab 3 — 180 min
 
@@ -73,7 +90,7 @@ controles de criptografia e documentação de governança**.
 | 55–85 | 3.3 | perfis, `\du`, `\dp`, logins reais pela rede com TLS | `PUBLIC` pode conectar e executar por padrão: surpreende muita gente |
 | 85–110 | 3.4–3.5 | visão do atendimento, limites, 15 testes | máscara não é anonimização |
 | 110–135 | 3.6 | checklist, BACEN/PCI como "a avaliar", ADR revisado | PCI DSS é sobre dados de cartão: este banco não tem |
-| 135–180 | 3.7 | 6 min + 3 min por equipe; perguntas individuais | ver rubrica abaixo |
+| 135–180 | 3.7 | 6 min + 3 min por equipe; perguntas individuais | turma de 25 = 5 equipes de 5 (5 × 9 = 45 min, sem folga). Com 6 equipes ou mais, use 5 + 2 min e encerre a 3.6 aos 130 min |
 
 ## Avaliação
 
@@ -91,7 +108,7 @@ controles de criptografia e documentação de governança**.
 ### Perguntas individuais
 
 Faça **uma ou duas** por pessoa, sorteando o lab. As respostas esperadas
-estão no [gabarito](./gabarito.md#perguntas-individuais). Avalie o
+estão no gabarito do instrutor (seção "Perguntas individuais"). Avalie o
 entendimento, não as palavras exatas.
 
 1. Por que dinheiro não vai em `float`? E o que o `numeric(15,2)` faz com 10,005?
@@ -116,7 +133,7 @@ entendimento, não as palavras exatas.
 * A chave dos campos passa pelo SQL (variável do psql). Em produção, a cifragem costuma ficar na aplicação, com a chave vinda de um KMS.
 * As senhas dos usuários do Lab 3 são de laboratório e ficam no `~/.pgpass` do container.
 * O backup cifrado da seção 2.8 é anterior à cifragem da renda: ele guarda a renda em claro (cifrada pelo `gpg`). Isso é discutido no roteiro.
-* Backup físico (`pg_basebackup`) e PITR ficaram fora dos 180 minutos. Eles aparecem como estudo complementar na discussão do Lab 2.
+* Backup físico (`pg_basebackup`) e PITR não estão nos labs: são mostrados pelo instrutor na **Aula 03** (teórica), com o roteiro [demos/pitr](../demos/pitr/README.md) (~30 min, numa cópia da produção, sem mexer no banco dos labs). Rode a demonstração uma vez na véspera.
 * Os tempos (`real`, `EXPLAIN`, RTO) dependem da máquina. As saídas dos roteiros vêm de uma execução real; os números dos alunos serão outros.
 
 ## Manutenção

@@ -36,6 +36,11 @@ pronto, e o roteiro explica cada linha que importa.
 
 ⏱️ 15 min
 
+> **Antes de tudo, no seu perfil:** 🪟 **Windows**: abra o Docker Desktop
+> (se usa) e o terminal do **Ubuntu**. 🐧 **Linux**: abra o terminal. Nos
+> dois, entre na pasta com `cd ~/database_engineer_banco`. O passo a passo
+> está em [o começo de cada aula](../../README.md#o-começo-de-cada-aula-em-cada-perfil).
+
 🖥️ **No seu terminal**, na pasta do repositório:
 
 <!-- rodar: shell -->
@@ -719,6 +724,12 @@ Feche a janela B (`\q`).
 
 ⏱️ 35 min
 
+> **Ponto de partida, não assunto novo.** Ler um `EXPLAIN` e criar um índice
+> fazem parte do nível Trained (Latência e Vazão). Aqui o `EXPLAIN` é a
+> ferramenta: o foco é **escolher o índice certo para cada padrão de
+> acesso**, provar por que a ordem das colunas importa e saber quanto o
+> índice custa.
+
 O padrão de acesso mais frequente é o P1: o extrato de uma conta num
 período. Peça ao banco o **plano** dessa consulta, executando-a de verdade
 (`EXPLAIN ANALYZE`).
@@ -815,6 +826,51 @@ segunda. Com `conta_id` primeiro, todos os lançamentos da conta 4242 ficam
 juntos e em ordem de data: o banco acha o começo do período e lê só o
 trecho. Com a data primeiro, ele percorreria os 30 dias de **todas** as
 contas. Regra prática: **igualdade primeiro, intervalo depois**.
+
+### Prove a regra: a ordem trocada
+
+Não acredite na regra: meça. Dentro de uma transação, troque o índice pelo
+de ordem invertida, peça o plano e desfaça tudo com `ROLLBACK`. O
+`BUFFERS` mostra quantas **páginas** (blocos de 8 kB) o banco precisou ler.
+
+🐘 **No psql:**
+
+<!-- rodar: producao -->
+```sql
+BEGIN;
+DROP INDEX idx_lancamentos_conta_data;
+CREATE INDEX idx_ordem_trocada ON lancamentos (criado_em, conta_id);
+EXPLAIN (ANALYZE, COSTS OFF, BUFFERS)
+SELECT criado_em, tipo, valor, transferencia_id
+FROM lancamentos
+WHERE conta_id = 4242 AND criado_em >= now() - interval '30 days'
+ORDER BY criado_em;
+ROLLBACK;
+```
+
+```
+BEGIN
+DROP INDEX
+CREATE INDEX
+                                         QUERY PLAN
+---------------------------------------------------------------------------------------------
+ Index Scan using idx_ordem_trocada on lancamentos (actual time=0.373..2.364 rows=5 loops=1)
+   Index Cond: ((criado_em >= (now() - '30 days'::interval)) AND (conta_id = 4242))
+   Buffers: shared hit=5 read=247
+ ...
+ Execution Time: 2.376 ms
+(7 rows)
+
+ROLLBACK
+```
+
+O banco **usou** o índice (`Index Scan`), e o tempo nem parece ruim. Mas
+olhe o `Buffers`: cerca de **250 páginas** para achar as mesmas 5 linhas.
+Com `conta_id` primeiro, foram umas **14**. Ele percorreu o trecho dos 30
+dias de **todas** as contas e foi descartando as que não eram a 4242.
+
+* O tempo engana numa tabela pequena que cabe na memória. As **páginas lidas** não: elas crescem com o volume. Com 10 vezes mais contas, a ordem trocada leria 10 vezes mais; a certa, as mesmas 14;
+* o `ROLLBACK` desfez o `DROP` e o `CREATE`: o índice certo voltou. No PostgreSQL, até mudança de estrutura (DDL) é transacional.
 
 **O preço.** Os 5 índices somam uns 64 MB. Cada transferência agora grava
 nas tabelas **e** em cada índice. Índice é escolha: um para cada padrão de

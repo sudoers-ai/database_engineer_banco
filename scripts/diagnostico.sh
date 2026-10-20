@@ -11,7 +11,11 @@ linha "sistema"
 uname -a
 docker --version 2>&1
 docker compose version 2>&1
-echo "memoria do Docker: $(( $(docker info --format '{{.MemTotal}}' 2>/dev/null || echo 0) / 1024 / 1024 )) MB"
+mem_b=$(docker info --format '{{.MemTotal}}' 2>/dev/null) || mem_b=""
+[[ "$mem_b" =~ ^[0-9]+$ ]] || mem_b=$(docker info --format '{{.Host.MemTotal}}' 2>/dev/null) || mem_b=0
+[[ "$mem_b" =~ ^[0-9]+$ ]] || mem_b=0
+echo "memoria do Docker: $(( mem_b / 1024 / 1024 )) MB"
+echo "imagem: $(grep -E '^IMAGEM_POSTGRES=' .env 2>/dev/null | cut -d= -f2- || echo postgres:17)"
 echo "commit do repositorio: $(git rev-parse --short HEAD 2>/dev/null || echo '?')"
 
 linha "arquivo .env"
