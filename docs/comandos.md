@@ -25,7 +25,7 @@ não estiver disponível.
 
 | Atalho | Equivalente |
 |---|---|
-| `make psql` | `docker exec -it dbb_producao psql -P pager=off -U sudoers -d banco_sudoers` |
+| `make psql` | `docker exec -it -e INPUTRC=/repo/infra/inputrc dbb_producao psql -P pager=off -U sudoers -d banco_sudoers` |
 | `make psql d=banco_restaurado` | o mesmo, no banco `banco_restaurado` |
 | `make bash` | `docker exec -it -u postgres dbb_producao bash` |
 | `make sql f=labs/1_modelagem/sql/01_schema.sql` | `docker exec dbb_producao psql -X -v ON_ERROR_STOP=1 -U sudoers -d banco_sudoers -f /repo/labs/1_modelagem/sql/01_schema.sql` |
@@ -37,6 +37,13 @@ O repositório aparece **dentro** do container em `/repo` (somente leitura):
 O `-P pager=off` desliga o paginador do psql: sem ele, um resultado longo
 no meio de um bloco colado abriria o `less`, que engoliria os comandos
 seguintes.
+
+O `INPUTRC` aponta para o [`infra/inputrc`](../infra/inputrc), que desliga o
+*bracketed paste* do terminal. Com ele ligado, um bloco colado chega ao psql
+como **uma linha só**, e um comando de barra na primeira linha (`\set`, `\c`)
+engole o SQL que vem depois em vez de deixá-lo rodar. Se você usa um psql
+instalado na sua máquina, cole a linha do `\set` ou do `\c` **sozinha**, dê
+Enter, e só então cole o resto do bloco.
 
 ## Conferência e recuperação
 

@@ -13,4 +13,6 @@ fi
 if ! sql_v "SELECT true" "$d"; then
   erro "o banco '$d' não existe (ainda)."; exit 1
 fi
-exec docker exec -it "$CONTAINER" psql -P pager=off -U sudoers -d "$d"
+# INPUTRC: desliga o "bracketed paste" (veja infra/inputrc). O compose ja
+# define a variavel; repetir aqui cobre o container criado antes dela existir.
+exec docker exec -it -e INPUTRC=/repo/infra/inputrc "$CONTAINER" psql -P pager=off -U sudoers -d "$d"
