@@ -1,0 +1,13 @@
+# Configuracao do readline (a biblioteca que le o teclado no psql e no bash)
+# dentro do servidor. O compose aponta a variavel INPUTRC para este arquivo.
+#
+# Com o "bracketed paste" ligado (padrao do readline 8.1+), um bloco colado
+# chega ao psql como UMA linha so. Um comando de barra na primeira linha
+# (\set, \c) vai ate o fim da linha, entao engole o SQL colado junto:
+#
+#     \set chave `cat /cofre/chave_campos`     <- a variavel fica com a chave
+#     UPDATE clientes SET ...                     E com este SQL grudado nela
+#
+# Desligado, cada linha colada e lida como se tivesse sido digitada.
+$include /etc/inputrc
+set enable-bracketed-paste off

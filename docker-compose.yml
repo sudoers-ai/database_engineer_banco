@@ -30,6 +30,9 @@ services:
       # sem paginador no psql: um resultado longo no meio de um bloco colado
       # abriria o "less", que engoliria os comandos seguintes
       PSQL_PAGER: cat
+      # sem "bracketed paste" no psql: com ele, um bloco colado chega como uma
+      # linha so, e um \set ou \c na primeira linha engole o SQL que vem depois
+      INPUTRC: /repo/infra/inputrc
       POSTGRES_USER: sudoers
       POSTGRES_PASSWORD: password
       POSTGRES_DB: banco_sudoers

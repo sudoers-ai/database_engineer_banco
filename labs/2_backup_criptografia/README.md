@@ -484,7 +484,7 @@ do storage de backup (`/backup`):
 
 <!-- rodar: bash-producao -->
 ```bash
-openssl rand -base64 32 > /cofre/chave_backup
+[ -f /cofre/chave_backup ] || openssl rand -base64 32 > /cofre/chave_backup
 chmod 600 /cofre/chave_backup
 ls -l /cofre
 ```
@@ -860,9 +860,12 @@ banco**: ela fica no cofre e só passa pelo SQL na hora de usar.
 
 <!-- rodar: bash-producao -->
 ```bash
-openssl rand -base64 32 > /cofre/chave_campos
+[ -f /cofre/chave_campos ] || openssl rand -base64 32 > /cofre/chave_campos
 chmod 600 /cofre/chave_campos
 ```
+
+O `[ -f ... ] ||` só cria a chave se ela ainda não existe. Gerar uma chave
+nova por cima da antiga deixaria ilegível tudo o que a antiga cifrou.
 
 🐘 **No psql**, o `\set` lê a chave do cofre para uma variável do psql (o
 arquivo não vai para o banco):
@@ -1073,6 +1076,7 @@ Saia do psql (`\q`) e do terminal do servidor (`exit`). Ao fim da aula:
 | `FATAL: pg_hba.conf rejects connection ... no encryption` | É o esperado sem TLS (seção 2.10) | Conecte com `sslmode=verify-full` |
 | `does not match host name` | Você conectou por um nome que não está no certificado | Use `host=producao` (ou `localhost`) |
 | `cat: /cofre/chave_campos: No such file` no `\set` | Faltou criar a chave (início da seção 2.11) | Rode o bloco do `openssl rand` no terminal do servidor |
+| `Wrong key or corrupt data` ao ler a renda com a chave do cofre | A renda foi cifrada com outra chave: a do cofre foi recriada depois, ou o `\set` engoliu o resto do bloco colado (psql fora do `make psql`) | A renda em claro ainda está na cópia `banco_restaurado` (seção 2.5) e no backup cifrado (seção 2.8): traga a coluna `renda_mensal` de lá e refaça a seção 2.11. Fora do `make psql`, cole a linha do `\set` sozinha, Enter, e depois o resto |
 | O DBeaver parou de conectar | A porta agora exige TLS | Ative SSL no DBeaver com o `ac.crt` como CA |
 
 Mais em [docs/faq.md](../../docs/faq.md).
