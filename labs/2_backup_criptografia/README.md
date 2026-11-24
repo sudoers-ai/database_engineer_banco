@@ -918,6 +918,10 @@ FROM clientes WHERE id <= 3 ORDER BY id;
 (3 rows)
 ```
 
+> 🆘 **Deu `Wrong key or corrupt data` aqui, com a chave do cofre?** A renda
+> foi cifrada com outra chave. Veja
+> [como refazer a cifragem da renda](../../docs/faq.md#preciso-refazer-a-cifragem-da-renda-lab-2-seção-211).
+
 <!-- rodar: producao falha-esperada -->
 ```sql
 SELECT pgp_sym_decrypt(renda_cifrada, 'chutei-uma-chave') FROM clientes WHERE id = 1;
@@ -1076,7 +1080,7 @@ Saia do psql (`\q`) e do terminal do servidor (`exit`). Ao fim da aula:
 | `FATAL: pg_hba.conf rejects connection ... no encryption` | É o esperado sem TLS (seção 2.10) | Conecte com `sslmode=verify-full` |
 | `does not match host name` | Você conectou por um nome que não está no certificado | Use `host=producao` (ou `localhost`) |
 | `cat: /cofre/chave_campos: No such file` no `\set` | Faltou criar a chave (início da seção 2.11) | Rode o bloco do `openssl rand` no terminal do servidor |
-| `Wrong key or corrupt data` ao ler a renda com a chave do cofre | A renda foi cifrada com outra chave: a do cofre foi recriada depois, ou o `\set` engoliu o resto do bloco colado (psql fora do `make psql`) | A renda em claro ainda está na cópia `banco_restaurado` (seção 2.5) e no backup cifrado (seção 2.8): traga a coluna `renda_mensal` de lá e refaça a seção 2.11. Fora do `make psql`, cole a linha do `\set` sozinha, Enter, e depois o resto |
+| `Wrong key or corrupt data` ao ler a renda com a chave do cofre | A renda foi cifrada com outra chave: a do cofre foi recriada depois, ou o `\set` engoliu o resto do bloco colado (psql fora do `make psql`) | A renda em claro ainda está na cópia `banco_restaurado`: siga o passo a passo de [como refazer a cifragem da renda](../../docs/faq.md#preciso-refazer-a-cifragem-da-renda-lab-2-seção-211). Fora do `make psql`, cole a linha do `\set` sozinha, Enter, e depois o resto |
 | O DBeaver parou de conectar | A porta agora exige TLS | Ative SSL no DBeaver com o `ac.crt` como CA |
 
 Mais em [docs/faq.md](../../docs/faq.md).
